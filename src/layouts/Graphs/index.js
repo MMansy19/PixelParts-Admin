@@ -26,7 +26,9 @@ function ChartsDashboard() {
 
   const fetchDoctorsStat = async () => {
     try {
-      const response = await Axios.get("http://127.0.0.1:3000/api/v1/doctors/stats");
+      const response = await Axios.get(
+        "https://mediportal-api-production.up.railway.app/api/v1/doctors/stats"
+      );
       // console.log(response);
       setDoctorsStats(response.data.data.stats);
     } catch (error) {
@@ -39,9 +41,12 @@ function ChartsDashboard() {
   const fetchAppointmentsStats = async () => {
     try {
       setLoading(true);
-      const response = await Axios.get("http://127.0.0.1:3000/api/v1/appointments/stats", {
-        headers: { Authorization: `Bearer ${Cookies.get("authToken")}` },
-      });
+      const response = await Axios.get(
+        "https://mediportal-api-production.up.railway.app/api/v1/appointments/stats",
+        {
+          headers: { Authorization: `Bearer ${Cookies.get("authToken")}` },
+        }
+      );
       setLoading(false);
       console.log(response.data.data.stats);
       setStats(response.data.data.stats);
@@ -178,7 +183,7 @@ function ChartsDashboard() {
                   coloredShadow="dark"
                 >
                   <MDTypography variant="h6" color="white">
-                    Bar Chart Example
+                    Bar Chart Example Testing
                   </MDTypography>
                 </MDBox>
                 <MDBox p={3} align="center">
@@ -264,7 +269,7 @@ function ChartsDashboard() {
                   coloredShadow="dark"
                 >
                   <MDTypography variant="h6" color="white">
-                    Bar Chart Example
+                    Bar Chart Example Testing
                   </MDTypography>
                 </MDBox>
                 <MDBox p={3} align="center">

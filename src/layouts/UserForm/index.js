@@ -47,7 +47,10 @@ export default function AddUser() {
     setLoading(true);
 
     try {
-      const response = await axios.post("http://127.0.0.1:3000/api/v1/auth/register", userData);
+      const response = await axios.post(
+        "https://mediportal-api-production.up.railway.app/api/v1/auth/register",
+        userData
+      );
       setLoading(false);
       console.log(response);
       if (response.status === 200) {

@@ -109,7 +109,7 @@ export default function productsTableData() {
       console.log("Updated fields:", updatedFields);
 
       await Axios.patch(
-        `http://127.0.0.1:3000/api/v1/products/${editedProduct.productId}`,
+        `https://mediportal-api-production.up.railway.app/api/v1/products/${editedProduct.productId}`,
         updatedFields,
         {
           headers: { Authorization: `Bearer ${token}` },
@@ -136,7 +136,9 @@ export default function productsTableData() {
 
   const fetchProducts = async () => {
     try {
-      const response = await Axios.get("http://127.0.0.1:3000/api/v1/products/allProducts");
+      const response = await Axios.get(
+        "https://mediportal-api-production.up.railway.app/api/v1/products/allProducts"
+      );
       const productsData = response.data.data.products;
       setProducts(productsData);
     } catch (error) {

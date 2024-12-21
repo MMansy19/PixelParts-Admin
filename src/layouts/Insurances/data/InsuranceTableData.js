@@ -12,9 +12,12 @@ export default function data() {
 
   const fetchInsurances = async () => {
     try {
-      const response = await Axios.get("http://127.0.0.1:3000/api/v1/insurances/allInsurances", {
-        headers: { Authorization: `Bearer ${Cookies.get("authToken")}` },
-      });
+      const response = await Axios.get(
+        "https://mediportal-api-production.up.railway.app/api/v1/insurances/allInsurances",
+        {
+          headers: { Authorization: `Bearer ${Cookies.get("authToken")}` },
+        }
+      );
       console.log(response.data.data.Insurances);
       setInsurances(response.data.data.Insurances); // Adjusted path to fit your sample data
     } catch (error) {

@@ -23,6 +23,7 @@ import { MaterialUIControllerProvider } from "context";
 
 const container = document.getElementById("app");
 const root = createRoot(container);
+document.title = "MediPortal Admin";
 
 root.render(
   <BrowserRouter>

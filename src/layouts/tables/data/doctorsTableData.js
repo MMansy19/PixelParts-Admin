@@ -36,7 +36,9 @@ export default function doctorsTableData() {
 
   const fetchDoctors = async () => {
     try {
-      const response = await Axios.get("http://127.0.0.1:3000/api/v1/doctors/allDoctors");
+      const response = await Axios.get(
+        "https://mediportal-api-production.up.railway.app/api/v1/doctors/allDoctors"
+      );
       const doctorsData = response.data.data.doctors;
       setDoctors(doctorsData);
       setActiveCount(doctorsData.filter((doctor) => doctor.userstate === "Active").length);
@@ -103,7 +105,7 @@ export default function doctorsTableData() {
       console.log("Updated fields:", updatedFields);
       // Make the API call with only updated fields
       const response = await Axios.patch(
-        `http://127.0.0.1:3000/api/v1/doctors/${editedDoctor.userid}`,
+        `https://mediportal-api-production.up.railway.app/api/v1/doctors/${editedDoctor.userid}`,
         updatedFields,
         {
           headers: {

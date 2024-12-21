@@ -24,9 +24,12 @@ export default function patientsTableData() {
 
   const fetchPatients = async () => {
     try {
-      const response = await Axios.get("http://127.0.0.1:3000/api/v1/patients/allPatients", {
-        headers: { Authorization: `Bearer ${Cookies.get("authToken")}` },
-      });
+      const response = await Axios.get(
+        "https://mediportal-api-production.up.railway.app/api/v1/patients/allPatients",
+        {
+          headers: { Authorization: `Bearer ${Cookies.get("authToken")}` },
+        }
+      );
       setPatients(response.data.data.patients);
     } catch (error) {
       console.error("Error fetching patients:", error);

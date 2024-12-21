@@ -15,7 +15,7 @@ export default function Data() {
   const fetchOrders = async () => {
     try {
       const response = await Axios.get(
-        "http://127.0.0.1:3000/api/v1/orders/allOrders?limit=7&&order=o.orderDate",
+        "https://mediportal-api-production.up.railway.app/api/v1/orders/allOrders?limit=7&&order=o.orderDate",
         {
           headers: {
             Authorization: `Bearer ${Cookies.get("authToken")}`,

@@ -20,7 +20,7 @@ function OrdersOverview() {
     const token = Cookies.get("authToken");
     try {
       const response = await Axios.get(
-        "http://127.0.0.1:3000/api/v1/appointments/allAppointments?limit=5&order=appointmentDate",
+        "https://mediportal-api-production.up.railway.app/api/v1/appointments/allAppointments?limit=5&order=appointmentDate",
         {
           headers: { Authorization: `Bearer ${token}` },
         }

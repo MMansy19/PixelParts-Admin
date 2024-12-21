@@ -146,9 +146,13 @@ function Tables() {
 
     try {
       console.log(productData);
-      const response = await axios.post("http://127.0.0.1:3000/api/v1/products/", productData, {
-        headers: { Authorization: `Bearer ${Cookies.get("authToken")}` },
-      });
+      const response = await axios.post(
+        "https://mediportal-api-production.up.railway.app/api/v1/products/",
+        productData,
+        {
+          headers: { Authorization: `Bearer ${Cookies.get("authToken")}` },
+        }
+      );
 
       if (response.status === 200) {
         setNotification({
@@ -181,9 +185,13 @@ function Tables() {
 
     try {
       console.log(categoryData);
-      const response = await axios.post("http://127.0.0.1:3000/api/v1/categories/", categoryData, {
-        headers: { Authorization: `Bearer ${Cookies.get("authToken")}` },
-      });
+      const response = await axios.post(
+        "https://mediportal-api-production.up.railway.app/api/v1/categories/",
+        categoryData,
+        {
+          headers: { Authorization: `Bearer ${Cookies.get("authToken")}` },
+        }
+      );
 
       if (response.status === 200) {
         setNotification({

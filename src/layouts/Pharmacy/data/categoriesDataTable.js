@@ -59,7 +59,7 @@ export default function categoriesTableData() {
       if (!token) throw new Error("Unauthorized access");
 
       await Axios.patch(
-        `http://127.0.0.1:3000/api/v1/categories/${editedCategory.categoryId}`,
+        `https://mediportal-api-production.up.railway.app/api/v1/categories/${editedCategory.categoryId}`,
         editedCategory,
         {
           headers: { Authorization: `Bearer ${token}` },
@@ -85,7 +85,9 @@ export default function categoriesTableData() {
 
   const fetchCategories = async () => {
     try {
-      const response = await Axios.get("http://127.0.0.1:3000/api/v1/categories/allCategories");
+      const response = await Axios.get(
+        "https://mediportal-api-production.up.railway.app/api/v1/categories/allCategories"
+      );
       const categoriesData = response.data.data.categories;
       setCategories(categoriesData);
     } catch (error) {

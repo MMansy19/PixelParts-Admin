@@ -40,10 +40,13 @@ function Basic() {
   const handleSignIn = async () => {
     setLoading(true);
     try {
-      const response = await Axios.post("http://127.0.0.1:3000/api/v1/auth/logIn", {
-        email,
-        password,
-      });
+      const response = await Axios.post(
+        "https://mediportal-api-production.up.railway.app/api/v1/auth/logIn",
+        {
+          email,
+          password,
+        }
+      );
 
       const { token, date } = response.data;
       const user = date?.user;

@@ -52,7 +52,7 @@ function Dashboard() {
 
   useEffect(() => {
     const token = Cookies.get("authToken");
-    Axios.get("http://127.0.0.1:3000/api/v1/stats", {
+    Axios.get("https://mediportal-api-production.up.railway.app/api/v1/stats", {
       headers: {
         Authorization: `Bearer ${token}`,
       },

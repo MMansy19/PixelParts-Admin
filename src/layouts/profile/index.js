@@ -77,11 +77,15 @@ function Overview() {
     setUserData(formData);
     try {
       console.log(formData);
-      const response = Axios.patch("http://127.0.0.1:3000/api/v1/auth/updateMe", formData, {
-        headers: {
-          Authorization: `Bearer ${Cookies.get("authToken")}`,
-        },
-      });
+      const response = Axios.patch(
+        "https://mediportal-api-production.up.railway.app/api/v1/auth/updateMe",
+        formData,
+        {
+          headers: {
+            Authorization: `Bearer ${Cookies.get("authToken")}`,
+          },
+        }
+      );
       console.log(response);
       Cookies.set("userData", JSON.stringify(formData)); // Update cookie data
       setNotification({
@@ -104,7 +108,7 @@ function Overview() {
   const handleSavePassword = () => {
     try {
       Axios.patch(
-        "http://127.0.0.1:3000/api/v1/auth/updatePassword", // Update password
+        "https://mediportal-api-production.up.railway.app/api/v1/auth/updatePassword", // Update password
         {
           oldPassword: formData.oldPassword,
           newPassword: formData.newPassword,

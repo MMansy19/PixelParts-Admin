@@ -119,7 +119,7 @@ export default function appointmentsTableData() {
       console.log("Updated fields:", updatedFields);
 
       await Axios.patch(
-        `http://127.0.0.1:3000/api/v1/appointments/${editedAppointment.appointmentId}`,
+        `https://mediportal-api-production.up.railway.app/api/v1/appointments/${editedAppointment.appointmentId}`,
         updatedFields,
         {
           headers: { Authorization: `Bearer ${token}` },
@@ -147,7 +147,7 @@ export default function appointmentsTableData() {
   const fetchAppointments = async () => {
     try {
       const response = await Axios.get(
-        "http://127.0.0.1:3000/api/v1/appointments/allAppointments",
+        "https://mediportal-api-production.up.railway.app/api/v1/appointments/allAppointments",
         {
           headers: { Authorization: `Bearer ${Cookies.get("authToken")}` },
         }

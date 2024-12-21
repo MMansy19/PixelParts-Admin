@@ -76,6 +76,10 @@ export default function App() {
     setRtlCache(cacheRtl);
   }, []);
 
+  useEffect(() => {
+    document.title = "MediPortal Admin";
+  }, []);
+
   // Open sidenav when mouse enter on mini sidenav
   const handleOnMouseEnter = () => {
     if (miniSidenav && !onMouseEnter) {

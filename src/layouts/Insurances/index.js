@@ -126,7 +126,7 @@ function Insurances() {
   const handleSaveProvider = async () => {
     try {
       const response = await Axios.post(
-        "http://127.0.0.1:3000/api/v1/insurances/provider",
+        "https://mediportal-api-production.up.railway.app/api/v1/insurances/provider",
         newProvider,
         {
           headers: { Authorization: `Bearer ${Cookies.get("authToken")}` },
@@ -156,7 +156,7 @@ function Insurances() {
   const handleSaveInsurance = async () => {
     try {
       const response = await Axios.post(
-        `http://127.0.0.1:3000/api/v1/insurances/${providerId}`,
+        `https://mediportal-api-production.up.railway.app/api/v1/insurances/${providerId}`,
         newInsurance,
         {
           headers: { Authorization: `Bearer ${Cookies.get("authToken")}` },

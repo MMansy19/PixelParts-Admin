@@ -46,9 +46,12 @@ function Tables() {
   const fetchAppointmentsStats = async () => {
     try {
       setLoading(true);
-      const response = await Axios.get("http://127.0.0.1:3000/api/v1/appointments/stats", {
-        headers: { Authorization: `Bearer ${Cookies.get("authToken")}` },
-      });
+      const response = await Axios.get(
+        "https://mediportal-api-production.up.railway.app/api/v1/appointments/stats",
+        {
+          headers: { Authorization: `Bearer ${Cookies.get("authToken")}` },
+        }
+      );
       setLoading(false);
       setStats(response.data.data.stats);
     } catch (error) {
@@ -60,7 +63,7 @@ function Tables() {
     try {
       setLoading(true);
       const response = await Axios.get(
-        "http://127.0.0.1:3000/api/v1/appointments/allAppointments",
+        "https://mediportal-api-production.up.railway.app/api/v1/appointments/allAppointments",
         {
           headers: { Authorization: `Bearer ${Cookies.get("authToken")}` },
         }

@@ -37,7 +37,7 @@ function Tables() {
     try {
       setLoading(true);
       const response = await Axios.get(
-        "http://127.0.0.1:3000/api/v1/appointments/allAppointments",
+        "https://mediportal-api-production.up.railway.app/api/v1/appointments/allAppointments",
         {
           headers: { Authorization: `Bearer ${Cookies.get("authToken")}` },
         }
