@@ -362,11 +362,12 @@ function Tables() {
           />
           <TextField
             name="productExpiryDate"
-            label="Product Expiry Date"
+            placeholder="Expiry Date"
             value={newProduct.productExpiryDate}
             onChange={handleInputChangeNewProduct}
             fullWidth
             margin="dense"
+            type="date"
           />
           <TextField
             name="productCategory"
@@ -453,6 +454,7 @@ function Tables() {
             onChange={handleInputChangeEditProduct}
             fullWidth
             margin="dense"
+            type="date"
           />
           <TextField
             name="manufacture"
