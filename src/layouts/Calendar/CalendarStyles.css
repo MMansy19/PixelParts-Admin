@@ -1,0 +1,41 @@
+/* Custom styles for react-big-calendar events */
+.rbc-event {
+  font-size: 12px; /* Make the title smaller */
+  font-weight: 500; /* Medium font weight for readability */
+  padding: 4px 8px; /* Add padding inside the event box */
+  border-radius: 6px; /* Rounded corners for events */
+  overflow: hidden; /* Prevent text overflow */
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  z-index: 0; /* Bring the event to the front */
+}
+
+.rbc-event-label {
+  display: none; /* Hide the default time label */
+}
+
+.rbc-event-content {
+  line-height: 1.2; /* Adjust line height for smaller titles */
+  z-index: 0; /* Bring the event content to the front */
+}
+
+/* Custom hover effect for events */
+.rbc-event:hover {
+  opacity: 1;
+  transform: scale(0.95); /* Slight scale-up on hover */
+  transition: all 0.2s ease-in-out;
+  z-index: 50; /* Bring the event to the front */
+}
+
+/* Calendar container styling */
+.rbc-calendar {
+  font-family: "Roboto", sans-serif; /* Use a clean modern font */
+}
+
+.rbc-toolbar button {
+  color: #555; /* Customize toolbar button colors */
+}
+
+.rbc-today {
+  background-color: #f0f8ff; /* Light blue for the current day */
+}

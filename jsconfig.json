@@ -1,0 +1,8 @@
+{
+  "compilerOptions": {
+    "baseUrl": "/MediPortal/Admin",
+    "paths": {
+      "*": ["public/src/*"]
+    }
+  }
+}
