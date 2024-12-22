@@ -59,6 +59,12 @@ function Tables() {
     notification: editNotification,
     handleCloseNotification: handleCloseEditNotification,
     handleInputChangeActiveIngredients: handleInputChangeActiveIngredientsEdit,
+
+    selectedFile,
+    handleFileChange,
+    handleUploadImage,
+    isFileModalOpen,
+    closeFileModal,
   } = productsTableData();
 
   const {
@@ -71,6 +77,12 @@ function Tables() {
     editedCategory,
     notification: editCategoryNotification,
     handleCloseNotification: handleCloseEditCategoryNotification,
+
+    selectedFile: selectedCategoryFile,
+    handleFileChange: handleCategoryFileChange,
+    handleUploadImage: handleUploadCategoryImage,
+    isFileModalOpen: isCategoryFileModalOpen,
+    closeFileModal: closeCategoryFileModal,
   } = categoriesTableData();
 
   const handlePageChange = (page) => {
@@ -484,6 +496,36 @@ function Tables() {
         </DialogActions>
       </Dialog>
 
+      {/* File Modal */}
+      <Dialog
+        open={isFileModalOpen}
+        onClose={closeFileModal}
+        TransitionComponent={Fade}
+        TransitionProps={{ timeout: 500 }}
+      >
+        <DialogTitle>Edit Product Image</DialogTitle>
+        <DialogContent>
+          {/* Product Fields */}
+          <TextField
+            name="image"
+            label="Product Image"
+            onChange={handleFileChange}
+            fullWidth
+            margin="dense"
+            type="file"
+            focused={true}
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={closeFileModal} color="secondary">
+            Cancel
+          </Button>
+          <Button onClick={handleUploadImage} color="primary">
+            Save
+          </Button>
+        </DialogActions>
+      </Dialog>
+
       {/* Category Modal */}
       <Dialog
         open={isCategoryModalOpen}
@@ -551,6 +593,36 @@ function Tables() {
             Cancel
           </Button>
           <Button onClick={handleSaveEditCategory} color="primary">
+            Save
+          </Button>
+        </DialogActions>
+      </Dialog>
+
+      {/* File Modal */}
+      <Dialog
+        open={isCategoryFileModalOpen}
+        onClose={closeCategoryFileModal}
+        TransitionComponent={Fade}
+        TransitionProps={{ timeout: 500 }}
+      >
+        <DialogTitle>Edit Category Image</DialogTitle>
+        <DialogContent>
+          {/* Product Fields */}
+          <TextField
+            name="image"
+            label="Category Image"
+            onChange={handleCategoryFileChange}
+            fullWidth
+            margin="dense"
+            type="file"
+            focused={true}
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={closeCategoryFileModal} color="secondary">
+            Cancel
+          </Button>
+          <Button onClick={handleUploadCategoryImage} color="primary">
             Save
           </Button>
         </DialogActions>

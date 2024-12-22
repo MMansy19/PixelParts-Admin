@@ -33,8 +33,63 @@ export default function productsTableData() {
   });
   const [isModalOpen, setIsModalOpen] = useState(false);
 
+  const [selectedFile, setSelectedFile] = useState(null);
+  const [isFileModalOpen, setIsFileModalOpen] = useState(false);
+  const [selectedId, setSelectedId] = useState(null);
+
+  const handleFileChange = (e) => {
+    setSelectedFile(e.target.files[0]);
+  };
+
+  const handleOpenFileModal = (productId) => {
+    setSelectedId(productId);
+    setSelectedFile(null);
+    setIsFileModalOpen(true);
+  };
+
   const handleCloseNotification = () => {
     setNotification((prev) => ({ ...prev, open: false }));
+  };
+
+  const closeFileModal = () => {
+    setIsFileModalOpen(false);
+    setSelectedFile(null);
+  };
+
+  const handleUploadImage = async () => {
+    try {
+      const token = Cookies.get("authToken");
+      if (!token) {
+        throw new Error("Unauthorized access");
+      }
+      const formData = new FormData();
+      formData.append("image", selectedFile);
+      const response = await Axios.patch(
+        `https://mediportal-api-production.up.railway.app/api/v1/products/${selectedId}`,
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      console.log(response.data);
+      setNotification({
+        open: true,
+        message: "Image uploaded successfully.",
+        severity: "success",
+      });
+    } catch (error) {
+      console.error("Error uploading image:", error);
+      setNotification({
+        open: true,
+        message: "Failed to upload image. Please try again.",
+        severity: "error",
+      });
+    } finally {
+      closeFileModal();
+    }
   };
 
   const handleEditClick = (product) => {
@@ -203,9 +258,18 @@ export default function productsTableData() {
           manufacture: product.manufacture,
           description: product.productdescription,
           action: (
-            <Button variant="text" color="primary" onClick={() => handleEditClick(product)}>
-              Edit
-            </Button>
+            <div className="flex justify-center">
+              <Button variant="text" color="primary" onClick={() => handleEditClick(product)}>
+                Edit
+              </Button>
+              <Button
+                variant="text"
+                color="secondary"
+                onClick={() => handleOpenFileModal(product.productid)}
+              >
+                Edit Image
+              </Button>
+            </div>
           ),
         }));
   }, [loading, products]);
@@ -225,7 +289,7 @@ export default function productsTableData() {
       { Header: "Expiry Date", accessor: "expiryDate", align: "center" },
       { Header: "Manufacture", accessor: "manufacture", align: "center" },
       { Header: "Description", accessor: "description", align: "left" },
-      { Header: "Action", accessor: "action", align: "center" },
+      { Header: "Actions", accessor: "action", align: "center" },
     ],
     rows: rows,
 
@@ -236,6 +300,13 @@ export default function productsTableData() {
     handleSaveChanges,
     isModalOpen,
     handleCloseModal,
+
+    // File upload modal
+    selectedFile,
+    handleFileChange,
+    handleUploadImage,
+    isFileModalOpen,
+    closeFileModal,
 
     // Notification snackbar
     notification,

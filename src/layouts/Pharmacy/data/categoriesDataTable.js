@@ -26,6 +26,62 @@ export default function categoriesTableData() {
   });
   const [isModalOpen, setIsModalOpen] = useState(false);
 
+  const [selectedFile, setSelectedFile] = useState(null);
+  const [isFileModalOpen, setIsFileModalOpen] = useState(false);
+  const [selectedId, setSelectedId] = useState(null);
+
+  const handleFileChange = (e) => {
+    setSelectedFile(e.target.files[0]);
+  };
+
+  const handleOpenFileModal = (category) => {
+    setSelectedId(category.categoryid);
+    setSelectedFile(null);
+    setIsFileModalOpen(true);
+  };
+
+  const closeFileModal = () => {
+    setIsFileModalOpen(false);
+    setSelectedFile(null);
+  };
+
+  const handleUploadImage = async () => {
+    try {
+      const token = Cookies.get("authToken");
+      if (!token) {
+        throw new Error("Unauthorized access");
+      }
+      const formData = new FormData();
+      formData.append("image", selectedFile);
+      console.log(selectedFile);
+      const response = await Axios.patch(
+        `https://mediportal-api-production.up.railway.app/api/v1/categories/${selectedId}`,
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      console.log(response.data);
+      setNotification({
+        open: true,
+        message: "Image uploaded successfully.",
+        severity: "success",
+      });
+    } catch (error) {
+      console.error("Error uploading image:", error);
+      setNotification({
+        open: true,
+        message: "Failed to upload image. Please try again.",
+        severity: "error",
+      });
+    } finally {
+      closeFileModal();
+    }
+  };
+
   const handleCloseNotification = () => {
     setNotification((prev) => ({ ...prev, open: false }));
   };
@@ -140,9 +196,18 @@ export default function categoriesTableData() {
           ),
           description: category.categorydescription,
           action: (
-            <Button variant="text" color="primary" onClick={() => handleEditClick(category)}>
-              Edit
-            </Button>
+            <div className="flex justify-center">
+              <Button variant="text" color="primary" onClick={() => handleEditClick(product)}>
+                Edit
+              </Button>
+              <Button
+                variant="text"
+                color="secondary"
+                onClick={() => handleOpenFileModal(category)}
+              >
+                Edit Image
+              </Button>
+            </div>
           ),
         }));
   }, [loading, categories]);
@@ -167,6 +232,14 @@ export default function categoriesTableData() {
     handleCloseModal,
     handleInputChange,
     handleSaveChanges,
+
+    // File upload modal
+    selectedFile,
+    handleFileChange,
+    handleUploadImage,
+    isFileModalOpen,
+    closeFileModal,
+
     // Notification snackbar
     notification,
     handleCloseNotification,
