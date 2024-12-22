@@ -90,7 +90,7 @@ export default function patientsTableData() {
 
       // Make API call to update patient
       await Axios.patch(
-        `http://127.0.0.1:3000/api/v1/patients/${editedPatient.userid}`,
+        `https://mediportal-api-production.up.railway.app/api/v1/patients/${editedPatient.userid}`,
         updatedFields,
         {
           headers: { Authorization: `Bearer ${token}` },

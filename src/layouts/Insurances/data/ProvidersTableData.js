@@ -92,7 +92,7 @@ export default function data() {
 
       // Send the PATCH request with the updated fields
       await Axios.patch(
-        `http://127.0.0.1:3000/api/v1/insurances/provider/${editedProvider.providerid}`,
+        `https://mediportal-api-production.up.railway.app/api/v1/insurances/provider/${editedProvider.providerid}`,
         updatedFields,
         {
           headers: { Authorization: `Bearer ${token}` },

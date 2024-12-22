@@ -174,7 +174,7 @@ export default function doctorsTableData() {
           doctorId: doctor.userid,
           Doctor: (
             <Author
-              image="https://via.placeholder.com/150"
+              image={doctor.userimg || "https://via.placeholder.com/150"}
               name={`${doctor.firstname} ${doctor.lastname}`}
               email={doctor.email}
             />

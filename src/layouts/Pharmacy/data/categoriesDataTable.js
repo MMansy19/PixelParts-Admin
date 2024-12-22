@@ -202,7 +202,7 @@ export default function categoriesTableData() {
           description: category.categorydescription,
           action: (
             <div className="flex justify-center">
-              <Button variant="text" color="primary" onClick={() => handleEditClick(product)}>
+              <Button variant="text" color="primary" onClick={() => handleEditClick(category)}>
                 Edit
               </Button>
               <Button
