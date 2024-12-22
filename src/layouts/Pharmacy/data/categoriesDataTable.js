@@ -145,6 +145,7 @@ export default function categoriesTableData() {
         "https://mediportal-api-production.up.railway.app/api/v1/categories/allCategories"
       );
       const categoriesData = response.data.data.categories;
+      console.log(categoriesData);
       setCategories(categoriesData);
     } catch (error) {
       console.error("Error fetching categories:", error);
@@ -162,9 +163,9 @@ export default function categoriesTableData() {
     fetchCategories();
   }, []);
 
-  const Author = ({ name, description }) => (
+  const Author = ({ name, description, image }) => (
     <MDBox display="flex" alignItems="center" lineHeight={1}>
-      <MDAvatar src="https://via.placeholder.com/150" name={name} size="sm" />
+      <MDAvatar src={image} name={name} size="sm" />
       <MDBox ml={2} lineHeight={1}>
         <MDTypography display="block" variant="button" fontWeight="medium">
           {name}
@@ -192,7 +193,11 @@ export default function categoriesTableData() {
           key: category.categoryid,
           categoryId: category.categoryid,
           Category: (
-            <Author name={category.categoryname} description={category.categorydescription} />
+            <Author
+              image={category.categoryimg || "https://via.placeholder.com/150"}
+              name={category.categoryname}
+              description={category.categorydescription}
+            />
           ),
           description: category.categorydescription,
           action: (
@@ -215,6 +220,7 @@ export default function categoriesTableData() {
   Author.propTypes = {
     name: PropTypes.string.isRequired,
     description: PropTypes.string.isRequired,
+    image: PropTypes.string.isRequired,
   };
 
   return {

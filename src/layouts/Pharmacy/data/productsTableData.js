@@ -247,7 +247,7 @@ export default function productsTableData() {
           productId: product.productid,
           Product: (
             <Author
-              image="https://via.placeholder.com/150"
+              image={product.productimg || "https://via.placeholder.com/150"}
               name={product.productname}
               description={product.productdescription}
             />

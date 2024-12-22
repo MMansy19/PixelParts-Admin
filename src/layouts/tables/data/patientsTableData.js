@@ -155,7 +155,7 @@ export default function patientsTableData() {
       : patients.map((patient) => ({
           Patient: (
             <Patient
-              image="https://via.placeholder.com/150" // Placeholder for patient image
+              image={patient.userimg || "https://via.placeholder.com/150"} // Placeholder for patient image
               name={`${patient.firstname} ${patient.lastname}`}
             />
           ),
