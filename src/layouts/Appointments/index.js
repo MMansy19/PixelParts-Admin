@@ -34,15 +34,19 @@ function Tables() {
   const {
     columns,
     rows,
-    editedAppointment,
+    editedProduct,
+    handleFileChange,
     handleInputChange,
     handleSaveChanges,
     isModalOpen,
+    isFileModalOpen,
+    closeFileModal,
     handleCloseModal,
     notification,
     handleCloseNotification,
+    handleUploadImage
   } = appData();
-
+  
   const fetchAppointmentsStats = async () => {
     try {
       setLoading(true);
@@ -169,7 +173,7 @@ function Tables() {
                 coloredShadow="info"
               >
                 <MDTypography variant="h6" color="white">
-                  Appointments Table
+                  Products Table
                 </MDTypography>
               </MDBox>
               <MDBox pt={3}>
@@ -187,61 +191,160 @@ function Tables() {
       </MDBox>
       <Footer />
 
-      {/* Modal for editing Appointments */}
-      <Dialog
-        open={isModalOpen}
-        onClose={handleCloseModal}
-        TransitionComponent={Fade}
-        TransitionProps={{ timeout: 500 }}
-      >
-        <DialogTitle>Edit Appointment Status</DialogTitle>
-        <DialogContent>
-          {editedAppointment && (
-            <>
-              <Select
-                name="appointmentStatus"
-                label="Appointment Status"
-                color="primary"
-                value={editedAppointment.appointmentStatus}
-                onChange={handleInputChange}
-                fullWidth
-                margin="dense"
-                style={{ marginTop: "1px", padding: "11px" }}
-                MenuProps={{
-                  PaperProps: {
-                    style: {
-                      backgroundColor: "#fff", // Ensure dropdown background is visible
-                    },
-                  },
-                }}
-                sx={{
-                  "& .MuiOutlinedInput-notchedOutline": {
-                    borderColor: "#ccc", // Outline color
-                  },
-                  "& .MuiInputLabel-root": {
-                    color: "#000", // Label text color
-                  },
-                  "& .MuiSelect-select": {
-                    color: "#000", // Selected text color
-                  },
-                }}
-              >
-                <MenuItem value="Completed">Completed</MenuItem>
-                <MenuItem value="Scheduled">Scheduled</MenuItem>
-                <MenuItem value="Cancelled">Cancelled</MenuItem>
-              </Select>
-            </>
-          )}
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleCloseModal} color="secondary">
-            Cancel
-          </Button>
-          <Button onClick={handleSaveChanges} color="primary">
-            Save
-          </Button>
-        </DialogActions>
-      </Dialog>
+{/* Modal for editing Products */}
+<Dialog
+  open={isModalOpen}
+  onClose={handleCloseModal}
+  TransitionComponent={Fade}
+  TransitionProps={{ timeout: 500 }}
+>
+  <DialogTitle>Edit Product Details</DialogTitle>
+  <DialogContent>
+    {editedProduct && (
+      <>
+        <TextField
+          name="productName"
+          label="Product Name"
+          value={editedProduct.productName}
+          onChange={handleInputChange}
+          fullWidth
+          margin="dense"
+        />
+        <TextField
+          name="category"
+          label="Category"
+          value={editedProduct.category}
+          onChange={handleInputChange}
+          fullWidth
+          margin="dense"
+        />
+        <TextField
+          name="manufacture"
+          label="Manufacturer"
+          value={editedProduct.manufacture}
+          onChange={handleInputChange}
+          fullWidth
+          margin="dense"
+        />
+        <TextField
+          name="price"
+          label="Price"
+          type="number"
+          value={editedProduct.price}
+          onChange={handleInputChange}
+          fullWidth
+          margin="dense"
+        />
+        <TextField
+          name="stockQuantity"
+          label="Stock Quantity"
+          type="number"
+          value={editedProduct.stockQuantity}
+          onChange={handleInputChange}
+          fullWidth
+          margin="dense"
+        />
+        <TextField
+          name="specifications"
+          label="Specifications"
+          value={editedProduct.specifications}
+          onChange={handleInputChange}
+          fullWidth
+          margin="dense"
+          multiline
+          rows={3}
+        />
+        <TextField
+          name="releaseDate"
+          label="Release Date"
+          type="date"
+          value={editedProduct.releaseDate}
+          onChange={handleInputChange}
+          fullWidth
+          margin="dense"
+          InputLabelProps={{
+            shrink: true,
+          }}
+        />
+        <TextField
+          name="warrantyPeriod"
+          label="Warranty Period (Months)"
+          type="number"
+          value={editedProduct.warrantyPeriod}
+          onChange={handleInputChange}
+          fullWidth
+          margin="dense"
+        />
+        <TextField
+          name="offerPercentage"
+          label="Offer Percentage"
+          type="number"
+          value={editedProduct.offerPercentage}
+          onChange={handleInputChange}
+          fullWidth
+          margin="dense"
+        />
+        <TextField
+          name="overallRating"
+          label="Overall Rating"
+          type="number"
+          value={editedProduct.overallRating}
+          onChange={handleInputChange}
+          fullWidth
+          margin="dense"
+        />
+        <TextField
+          name="description"
+          label="Description"
+          value={editedProduct.description}
+          onChange={handleInputChange}
+          fullWidth
+          margin="dense"
+          multiline
+          rows={4}
+        />
+      </>
+    )}
+  </DialogContent>
+  <DialogActions>
+    <Button onClick={handleCloseModal} color="secondary">
+      Cancel
+    </Button>
+    <Button onClick={handleSaveChanges} color="primary">
+      Save
+    </Button>
+  </DialogActions>
+</Dialog>
+
+  {/* File Modal */}
+  <Dialog
+    open={isFileModalOpen}
+    onClose={closeFileModal}
+    TransitionComponent={Fade}
+    TransitionProps={{ timeout: 500 }}
+  >
+    <DialogTitle>Edit Product Image</DialogTitle>
+    <DialogContent>
+      {/* Product Fields */}
+      <TextField
+        name="image"
+        label="Product Image"
+        onChange={handleFileChange}
+        fullWidth
+        margin="dense"
+        type="file"
+        focused={true}
+      />
+    </DialogContent>
+    <DialogActions>
+      <Button onClick={closeFileModal} color="secondary">
+        Cancel
+      </Button>
+      <Button onClick={handleUploadImage} color="primary">
+        Save
+      </Button>
+    </DialogActions>
+  </Dialog>
 
       {/* Notification Snackbar */}
       <MDSnackbar

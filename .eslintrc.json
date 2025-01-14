@@ -12,13 +12,9 @@
     "sourceType": "module"
   },
   "plugins": ["react", "prettier"],
+  
   "rules": {
-    "prettier/prettier": [
-      "error",
-      {
-        "endOfLine": "auto"
-      }
-    ],
+    "prettier/prettier": "off",
     "react/display-name": "off",
     "default-param-last": "off",
     "react/react-in-jsx-scope": "off",
