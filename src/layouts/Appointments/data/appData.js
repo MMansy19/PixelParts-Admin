@@ -279,6 +279,7 @@ const handleUploadImage = async () => {
     handleCloseModal,
     isModalOpen,
     notification,
+    setNotification,
     handleSaveChanges,
     handleCloseNotification,
     handleInputChange,

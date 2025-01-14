@@ -22,14 +22,29 @@ import MDSnackbar from "components/MDSnackbar";
 import { useState, useEffect } from "react";
 import Axios from "axios";
 import Cookies from "js-cookie";
+import axios from "axios";
+import { FormControl, InputLabel } from '@mui/material';
 
 // Data
 import appData from "layouts/Appointments/data/appData";
+import { Typography } from "@mui/material";
 
 function Tables() {
   const [stats, setStats] = useState({});
   const [loading, setLoading] = useState(false);
-  const [allAppointments, setAllAppointments] = useState([]);
+  const [isProductModalOpen, setIsProductModalOpen] = useState(false);
+  
+const [newProduct, setNewProduct] = useState({
+  category: "",
+  productName: "",
+  manufacture: "",
+  price: 0,
+  stockQuantity: 0,
+  specifications: [],
+  releaseDate: "",
+  warrantyPeriod: 0,
+  productImg: "",
+});
 
   const {
     columns,
@@ -43,10 +58,118 @@ function Tables() {
     closeFileModal,
     handleCloseModal,
     notification,
+    setNotification,
     handleCloseNotification,
     handleUploadImage
   } = appData();
-  
+    const handleAddProductClick = () => {
+    setIsProductModalOpen(true); // Open modal for adding new product
+  };
+
+  const handleAddSpecification = () => {
+  setNewProduct((prevProduct) => ({
+    ...prevProduct,
+    specifications: [...prevProduct.specifications, { key: "", value: "" }],
+  }));
+};
+
+const handleRemoveSpecification = (index) => {
+  setNewProduct((prevProduct) => ({
+    ...prevProduct,
+    specifications: prevProduct.specifications.filter((_, i) => i !== index),
+  }));
+};
+
+const handleSpecificationChange = (e, index, field) => {
+  const value = e.target.value;
+  setNewProduct((prevProduct) => {
+    const updatedSpecifications = [...prevProduct.specifications];
+    updatedSpecifications[index][field] = value;
+    return { ...prevProduct, specifications: updatedSpecifications };
+  });
+};
+
+
+  const handleCloseAddProductModal = () => {
+    setIsProductModalOpen(false); // Close modal
+    setNewProduct({
+      productName: "",
+      productPrice: "",
+      productStackQuantity: "",
+      productDescription: "",
+      productExpiryDate: "",
+      productCategory: "",
+      manufacture: "",
+      activeIngredient: [],
+    });
+  };
+const handleInputChangeNewProduct = (e) => {
+  const { name, value } = e.target;
+  setNewProduct((prevState) => ({
+    ...prevState,
+    [name]: value,
+  }));
+};
+
+const handleSaveProduct = async () => {
+  // Construct product data
+  // Validate specifications
+  const validSpecifications = newProduct.specifications.reduce((acc, spec) => {
+    if (spec.key && spec.value) {
+      acc[spec.key.trim()] = spec.value.trim();
+    }
+    return acc;
+  }, {});
+
+  const productData = {
+    category: newProduct.category,
+    productName: newProduct.productName,
+    manufacture: newProduct.manufacture,
+    price: newProduct.price,
+    stockQuantity: newProduct.stockQuantity,
+    specifications: validSpecifications,
+    releaseDate: newProduct.releaseDate && newProduct.releaseDate,
+    warrantyPeriod:newProduct.warrantyPeriod && newProduct.warrantyPeriod,
+    productImg: newProduct.productImg && newProduct.productImg,
+  };
+
+  try {
+    console.log("Sending product data:", productData);
+
+    // Make POST request
+    const response = await axios.post(
+      "https://pixelparts-dev-api.up.railway.app/api/v1/product/addProduct",
+      productData,
+      {
+        headers: { Authorization: `Bearer ${Cookies.get("authToken")}` },
+      }
+    );
+
+    // Handle response
+    if (response.status === 200) {
+      setNotification({
+        open: true,
+        message: "Product added successfully",
+        severity: "success",
+      });
+      handleCloseAddProductModal(); // Close modal on success
+    } else {
+      setNotification({
+        open: true,
+        message: "Failed to add product",
+        severity: "error",
+      });
+    }
+  } catch (error) {
+    console.error("Error adding product:", error);
+    setNotification({
+      open: true,
+      message: "An error occurred while adding the product",
+      severity: "error",
+    });
+  }
+};
+
   const fetchAppointmentsStats = async () => {
     try {
       setLoading(true);
@@ -64,27 +187,8 @@ function Tables() {
     }
   };
 
-  const fetchAllProducts = async () => {
-    try {
-      setLoading(true);
-      const response = await Axios.get(
-        // "https://mediportal-api-production.up.railway.app/api/v1/appointments/allAppointments",
-        "https://pixelparts-dev-api.up.railway.app/api/v1/product/allProducts",
-        {
-          headers: { Authorization: `Bearer ${Cookies.get("authToken")}` },
-        }
-      );
-      setAllAppointments(response.data.data.Appointments);
-    } catch (error) {
-      console.error("Error fetching products:", error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
   useEffect(() => {
     fetchAppointmentsStats();
-    fetchAllProducts();
   }, []);
 
   return (
@@ -171,10 +275,27 @@ function Tables() {
                 bgColor="dark"
                 borderRadius="lg"
                 coloredShadow="info"
+                display="flex"
+                justifyContent="space-between"
+                alignItems="center"
               >
                 <MDTypography variant="h6" color="white">
                   Products Table
                 </MDTypography>
+                <Button
+                  variant="outlined"
+                  color="secondary"
+                  onClick={handleAddProductClick}
+                  sx={{
+                    borderRadius: 2,
+                    fontSize: 14,
+                    padding: "6px 16px",
+                    color: "black",
+                  }}
+                >
+                  Add Product
+                </Button>
+
               </MDBox>
               <MDBox pt={3}>
                 <DataTable
@@ -190,6 +311,146 @@ function Tables() {
         </Grid>
       </MDBox>
       <Footer />
+      {/* Product Modal */}
+      <Dialog open={isProductModalOpen} onClose={handleCloseAddProductModal}>
+  <DialogTitle>Add New Product</DialogTitle>
+  <DialogContent>
+    {/* Product Fields */}
+    <TextField
+      name="productName"
+      label="Product Name"
+      value={newProduct.productName}
+      onChange={handleInputChangeNewProduct}
+      fullWidth
+      margin="dense"
+    />
+  <FormControl fullWidth margin="dense">
+    <InputLabel id="category-label">Category</InputLabel>
+    <Select
+    style={{ padding: "10px 0" }}
+      labelId="category-label"
+      name="category"
+      value={newProduct.category}
+      onChange={handleInputChangeNewProduct}
+      fullWidth
+    >
+      {/* Add all valid categories */}
+      <MenuItem value="Cpu">Cpu</MenuItem>
+      <MenuItem value="Gpu">Gpu</MenuItem>
+      <MenuItem value="Ram">Ram</MenuItem>
+      <MenuItem value="Storage">Storage</MenuItem>
+      <MenuItem value="Motherboard">Motherboard</MenuItem>
+      <MenuItem value="Psu">Psu</MenuItem>
+      <MenuItem value="Case">Case</MenuItem>
+      <MenuItem value="Cooling">Cooling</MenuItem>
+      <MenuItem value="others">others</MenuItem>
+    </Select>
+  </FormControl>
+    <TextField
+      name="manufacture"
+      label="Manufacture"
+      value={newProduct.manufacture}
+      onChange={handleInputChangeNewProduct}
+      fullWidth
+      margin="dense"
+    />
+    <TextField
+      name="price"
+      label="Price"
+      value={newProduct.price}
+      onChange={handleInputChangeNewProduct}
+      type="number"
+      fullWidth
+      margin="dense"
+    />
+    <TextField
+      name="stockQuantity"
+      label="Stock Quantity"
+      value={newProduct.stockQuantity}
+      onChange={handleInputChangeNewProduct}
+      type="number"
+      fullWidth
+      margin="dense"
+    />
+
+{/* Dynamic Specifications Field */}
+<div>
+  <Typography variant="h6" gutterBottom>
+    Specifications
+  </Typography>
+{newProduct.specifications?.length > 0 &&
+  newProduct.specifications.map((spec, index) => (
+    <div key={index} style={{ display: "flex", gap: "10px", marginBottom: "10px" }}>
+      {/* Key Input */}
+      <TextField
+        name={`key-${index}`}
+        label="Specification Key"
+        value={spec.key || ""}
+        onChange={(e) => handleSpecificationChange(e, index, "key")}
+        fullWidth
+      />
+      {/* Value Input */}
+      <TextField
+        name={`value-${index}`}
+        label="Specification Value"
+        value={spec.value || ""}
+        onChange={(e) => handleSpecificationChange(e, index, "value")}
+        fullWidth
+      />
+      {/* Remove Button */}
+      <Button
+        variant="outlined"
+        color="secondary"
+        onClick={() => handleRemoveSpecification(index)}
+        style={{
+          color: 'red',
+        }}
+      >
+        Remove
+      </Button>
+    </div>
+  ))}
+  <Button
+    variant="outlined"
+    color="primary"
+    onClick={handleAddSpecification}
+    style={{ marginTop: "10px",
+      color:'green',
+     }}
+  >
+    Add Specification
+  </Button>
+</div>
+
+
+    <TextField
+      name="releaseDate"
+      label="Release Date"
+      value={newProduct.releaseDate || new Date().toISOString().split("T")[0] }
+      onChange={handleInputChangeNewProduct}
+      type="date"
+      fullWidth
+      margin="dense"
+    />
+    <TextField
+      name="warrantyPeriod"
+      label="Warranty Period (Months)"
+      value={newProduct.warrantyPeriod}
+      onChange={handleInputChangeNewProduct}
+      type="number"
+      fullWidth
+      margin="dense"
+    />
+  </DialogContent>
+  <DialogActions>
+    <Button onClick={handleCloseAddProductModal} color="secondary">
+      Cancel
+    </Button>
+    <Button onClick={handleSaveProduct} color="primary">
+      Save
+    </Button>
+  </DialogActions>
+</Dialog>
 
 {/* Modal for editing Products */}
 <Dialog
