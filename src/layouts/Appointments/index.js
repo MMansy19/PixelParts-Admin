@@ -47,6 +47,7 @@ function Tables() {
     try {
       setLoading(true);
       const response = await Axios.get(
+        // TO DO
         "https://mediportal-api-production.up.railway.app/api/v1/appointments/stats",
         {
           headers: { Authorization: `Bearer ${Cookies.get("authToken")}` },
@@ -59,18 +60,19 @@ function Tables() {
     }
   };
 
-  const fetchAllAppointments = async () => {
+  const fetchAllProducts = async () => {
     try {
       setLoading(true);
       const response = await Axios.get(
-        "https://mediportal-api-production.up.railway.app/api/v1/appointments/allAppointments",
+        // "https://mediportal-api-production.up.railway.app/api/v1/appointments/allAppointments",
+        "https://pixelparts-dev-api.up.railway.app/api/v1/product/allProducts",
         {
           headers: { Authorization: `Bearer ${Cookies.get("authToken")}` },
         }
       );
       setAllAppointments(response.data.data.Appointments);
     } catch (error) {
-      console.error("Error fetching appointments:", error);
+      console.error("Error fetching products:", error);
     } finally {
       setLoading(false);
     }
@@ -78,7 +80,7 @@ function Tables() {
 
   useEffect(() => {
     fetchAppointmentsStats();
-    fetchAllAppointments();
+    fetchAllProducts();
   }, []);
 
   return (
@@ -91,7 +93,7 @@ function Tables() {
               <ComplexStatisticsCard
                 color="dark"
                 icon="people"
-                title="Total Appointments"
+                title="Total Products"
                 count={
                   loading
                     ? "Loading..."

@@ -41,7 +41,7 @@ function Basic() {
     setLoading(true);
     try {
       const response = await Axios.post(
-        "https://mediportal-api-production.up.railway.app/api/v1/auth/logIn",
+        "https://pixelparts-dev-api.up.railway.app/api/v1/auth/logIn",
         {
           email,
           password,

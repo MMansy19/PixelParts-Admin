@@ -69,10 +69,10 @@ const routes = [
   },
   {
     type: "collapse",
-    name: "Appointments",
-    key: "appointments",
-    icon: <Icon fontSize="small">event</Icon>,
-    route: "/appointments",
+    name: "Products",
+    key: "products",
+    icon: <Icon fontSize="small">shopping_cart</Icon>,
+    route: "/products",
     component: <Appointments />,
   },
   {
