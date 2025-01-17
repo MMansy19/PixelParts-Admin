@@ -37,9 +37,10 @@ export default function doctorsTableData() {
   const fetchDoctors = async () => {
     try {
       const response = await Axios.get(
-        "https://mediportal-api-production.up.railway.app/api/v1/doctors/allDoctors"
+        "https://pixelparts-dev-api.up.railway.app/api/v1/user/getAllUsers"
       );
-      const doctorsData = response.data.data.doctors;
+      // const doctorsData = response.data.data.doctors;
+      const doctorsData = response.data.data;
       setDoctors(doctorsData);
       setActiveCount(doctorsData.filter((doctor) => doctor.userstate === "Active").length);
       setPendingCount(doctorsData.filter((doctor) => doctor.userstate === "Pending").length);

@@ -45,51 +45,51 @@ export default function productsTableData() {
   const handleCloseNotification = () => {
     setNotification((prev) => ({ ...prev, open: false }));
   };
-const handleUploadImage = async () => {
-  try {
-    const token = Cookies.get("authToken");
-    if (!token) {
-      throw new Error("Unauthorized access");
-    }
-
-    if (!selectedFile) {
-      throw new Error("No file selected");
-    }
-
-    const formData = new FormData();
-    formData.append("image", selectedFile);
-
-    console.log("FormData entries:", [...formData.entries()]); // Log form data
-
-    const response = await Axios.patch(
-      `https://pixelparts-dev-api.up.railway.app/api/v1/product/editProduct/${selectedId}`,
-      formData,
-      {
-        headers: {
-          "Content-Type": "multipart/form-data",
-          Authorization: `Bearer ${token}`,
-        },
+  const handleUploadImage = async () => {
+    try {
+      const token = Cookies.get("authToken");
+      if (!token) {
+        throw new Error("Unauthorized access");
       }
-    );
 
-    console.log("Upload response:", response.data);
+      if (!selectedFile) {
+        throw new Error("No file selected");
+      }
 
-    setNotification({
-      open: true,
-      message: "Image uploaded successfully.",
-      severity: "success",
-    });
-  } catch (error) {
-    console.error("Error uploading image:", error.response || error.message);
-    setNotification({
-      open: true,
-      message: "Failed to upload image. Please try again.",
-      severity: "error",
-    });
-  } finally {
-    closeFileModal();
-  }
-};
+      const formData = new FormData();
+      formData.append("image", selectedFile);
+
+      console.log("FormData entries:", [...formData.entries()]); // Log form data
+
+      const response = await Axios.patch(
+        `https://pixelparts-dev-api.up.railway.app/api/v1/product/editProduct/${selectedId}`,
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      console.log("Upload response:", response.data);
+
+      setNotification({
+        open: true,
+        message: "Image uploaded successfully.",
+        severity: "success",
+      });
+    } catch (error) {
+      console.error("Error uploading image:", error.response || error.message);
+      setNotification({
+        open: true,
+        message: "Failed to upload image. Please try again.",
+        severity: "error",
+      });
+    } finally {
+      closeFileModal();
+    }
+  };
 
   const handleEditClick = (product) => {
     setEditedProduct({
@@ -107,9 +107,9 @@ const handleUploadImage = async () => {
       description: product.description,
     });
     setIsModalOpen(true);
-};
+  };
 
- const closeFileModal = () => {
+  const closeFileModal = () => {
     setIsFileModalOpen(false);
     setSelectedFile(null);
   };
@@ -132,11 +132,10 @@ const handleUploadImage = async () => {
       overallRating: "",
     });
   };
- const handleInputChange = (e) => {
+  const handleInputChange = (e) => {
     const { name, value } = e.target;
     setEditedProduct((prev) => ({ ...prev, [name]: value }));
   };
-
 
   const fetchProducts = async () => {
     try {
@@ -161,9 +160,7 @@ const handleUploadImage = async () => {
         throw new Error("Unauthorized access");
       }
 
-      const originalProduct = products.find(
-        (p) => p.productid === editedProduct.productId
-      );
+      const originalProduct = products.find((p) => p.productid === editedProduct.productId);
       const updatedFields = Object.keys(editedProduct).reduce((changes, key) => {
         if (editedProduct[key] !== originalProduct[key]) {
           changes[key] = editedProduct[key];
@@ -208,7 +205,6 @@ const handleUploadImage = async () => {
     }
   };
 
-
   useEffect(() => {
     fetchProducts();
   }, []);
@@ -232,15 +228,21 @@ const handleUploadImage = async () => {
         ]
       : products.map((product) => ({
           productId: product.productid,
-          productName: product.productname, 
-          productimg: <MDAvatar src={product.productimg || "https://via.placeholder.com/150"} name={product.productname} size="xl" />,
+          productName: product.productname,
+          productimg: (
+            <MDAvatar
+              src={product.productimg || "https://via.placeholder.com/150"}
+              name={product.productname}
+              size="xl"
+            />
+          ),
           category: product.category,
           manufacture: product.manufacture,
           price: `$${product.price}`,
           stockQuantity: product.stockquantity,
           releaseDate: new Date(product.releasedate).toLocaleDateString(),
-          warrantyPeriod: product.warrantyperiod? `${product.warrantyperiod} months` : 'No Period',
-          offerPercentage: product.offerpercentage? `${product.offerpercentage}%` : 'No Offers',
+          warrantyPeriod: product.warrantyperiod ? `${product.warrantyperiod} months` : "No Period",
+          offerPercentage: product.offerpercentage ? `${product.offerpercentage}%` : "No Offers",
           overallRating: parseFloat(product.overallrating).toFixed(2),
           action: (
             <div className="flex justify-center">
@@ -285,8 +287,7 @@ const handleUploadImage = async () => {
     handleInputChange,
     handleUploadImage,
     handleFileChange,
-    isFileModalOpen,    
+    isFileModalOpen,
     closeFileModal,
-    
   };
 }

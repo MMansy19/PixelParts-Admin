@@ -307,7 +307,7 @@ export default function productsTableData() {
     handleUploadImage,
     isFileModalOpen,
     closeFileModal,
-    
+
     // Notification snackbar
     notification,
     handleCloseNotification,
