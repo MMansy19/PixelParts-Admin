@@ -23,7 +23,7 @@ import { useState, useEffect } from "react";
 import Axios from "axios";
 import Cookies from "js-cookie";
 import axios from "axios";
-import { FormControl, InputLabel } from "@mui/material";
+import { Box, FormControl, InputLabel } from '@mui/material';
 
 // Data
 import appData from "layouts/Appointments/data/appData";
@@ -34,17 +34,17 @@ function Tables() {
   const [loading, setLoading] = useState(false);
   const [isProductModalOpen, setIsProductModalOpen] = useState(false);
 
-  const [newProduct, setNewProduct] = useState({
-    category: "",
-    productName: "",
-    manufacture: "",
-    price: 0,
-    stockQuantity: 0,
-    specifications: [],
-    releaseDate: "",
-    warrantyPeriod: 0,
-    productImg: "",
-  });
+const [newProduct, setNewProduct] = useState({
+  category: "",
+  productName: "",
+  manufacture: "",
+  price: 0,
+  stockQuantity: 0,
+  specifications: [],
+  releaseDate: "",
+  warrantyPeriod: 0,
+  productImg: "",
+});
 
   const {
     columns,
@@ -61,33 +61,35 @@ function Tables() {
     setNotification,
     handleCloseNotification,
     handleUploadImage,
+    imagePreview,
   } = appData();
-  const handleAddProductClick = () => {
+    const handleAddProductClick = () => {
     setIsProductModalOpen(true); // Open modal for adding new product
   };
 
   const handleAddSpecification = () => {
-    setNewProduct((prevProduct) => ({
-      ...prevProduct,
-      specifications: [...prevProduct.specifications, { key: "", value: "" }],
-    }));
-  };
+  setNewProduct((prevProduct) => ({
+    ...prevProduct,
+    specifications: [...prevProduct.specifications, { key: "", value: "" }],
+  }));
+};
 
-  const handleRemoveSpecification = (index) => {
-    setNewProduct((prevProduct) => ({
-      ...prevProduct,
-      specifications: prevProduct.specifications.filter((_, i) => i !== index),
-    }));
-  };
+const handleRemoveSpecification = (index) => {
+  setNewProduct((prevProduct) => ({
+    ...prevProduct,
+    specifications: prevProduct.specifications.filter((_, i) => i !== index),
+  }));
+};
 
-  const handleSpecificationChange = (e, index, field) => {
-    const value = e.target.value;
-    setNewProduct((prevProduct) => {
-      const updatedSpecifications = [...prevProduct.specifications];
-      updatedSpecifications[index][field] = value;
-      return { ...prevProduct, specifications: updatedSpecifications };
-    });
-  };
+const handleSpecificationChange = (e, index, field) => {
+  const value = e.target.value;
+  setNewProduct((prevProduct) => {
+    const updatedSpecifications = [...prevProduct.specifications];
+    updatedSpecifications[index][field] = value;
+    return { ...prevProduct, specifications: updatedSpecifications };
+  });
+};
+
 
   const handleCloseAddProductModal = () => {
     setIsProductModalOpen(false); // Close modal
@@ -102,72 +104,72 @@ function Tables() {
       activeIngredient: [],
     });
   };
-  const handleInputChangeNewProduct = (e) => {
-    const { name, value } = e.target;
-    setNewProduct((prevState) => ({
-      ...prevState,
-      [name]: value,
-    }));
+const handleInputChangeNewProduct = (e) => {
+  const { name, value } = e.target;
+  setNewProduct((prevState) => ({
+    ...prevState,
+    [name]: value,
+  }));
+};
+
+const handleSaveProduct = async () => {
+  // Construct product data
+  // Validate specifications
+  const validSpecifications = newProduct.specifications.reduce((acc, spec) => {
+    if (spec.key && spec.value) {
+      acc[spec.key.trim()] = spec.value.trim();
+    }
+    return acc;
+  }, {});
+
+  const productData = {
+    category: newProduct.category,
+    productName: newProduct.productName,
+    manufacture: newProduct.manufacture,
+    price: newProduct.price,
+    stockQuantity: newProduct.stockQuantity,
+    specifications: validSpecifications,
+    releaseDate: newProduct.releaseDate && newProduct.releaseDate,
+    warrantyPeriod:newProduct.warrantyPeriod && newProduct.warrantyPeriod,
+    productImg: newProduct.productImg && newProduct.productImg,
   };
 
-  const handleSaveProduct = async () => {
-    // Construct product data
-    // Validate specifications
-    const validSpecifications = newProduct.specifications.reduce((acc, spec) => {
-      if (spec.key && spec.value) {
-        acc[spec.key.trim()] = spec.value.trim();
+  try {
+    console.log("Sending product data:", productData);
+
+    // Make POST request
+    const response = await axios.post(
+      "https://pixelparts-dev-api.up.railway.app/api/v1/product/addProduct",
+      productData,
+      {
+        headers: { Authorization: `Bearer ${Cookies.get("authToken")}` },
       }
-      return acc;
-    }, {});
+    );
 
-    const productData = {
-      category: newProduct.category,
-      productName: newProduct.productName,
-      manufacture: newProduct.manufacture,
-      price: newProduct.price,
-      stockQuantity: newProduct.stockQuantity,
-      specifications: validSpecifications,
-      releaseDate: newProduct.releaseDate && newProduct.releaseDate,
-      warrantyPeriod: newProduct.warrantyPeriod && newProduct.warrantyPeriod,
-      productImg: newProduct.productImg && newProduct.productImg,
-    };
-
-    try {
-      console.log("Sending product data:", productData);
-
-      // Make POST request
-      const response = await axios.post(
-        "https://pixelparts-dev-api.up.railway.app/api/v1/product/addProduct",
-        productData,
-        {
-          headers: { Authorization: `Bearer ${Cookies.get("authToken")}` },
-        }
-      );
-
-      // Handle response
-      if (response.status === 200) {
-        setNotification({
-          open: true,
-          message: "Product added successfully",
-          severity: "success",
-        });
-        handleCloseAddProductModal(); // Close modal on success
-      } else {
-        setNotification({
-          open: true,
-          message: "Failed to add product",
-          severity: "error",
-        });
-      }
-    } catch (error) {
-      console.error("Error adding product:", error);
+    // Handle response
+    if (response.status === 200) {
       setNotification({
         open: true,
-        message: "An error occurred while adding the product",
+        message: "Product added successfully",
+        severity: "success",
+      });
+      handleCloseAddProductModal(); // Close modal on success
+    } else {
+      setNotification({
+        open: true,
+        message: "Failed to add product",
         severity: "error",
       });
     }
-  };
+  } catch (error) {
+    console.error("Error adding product:", error);
+    setNotification({
+      open: true,
+      message: "An error occurred while adding the product",
+      severity: "error",
+    });
+  }
+};
 
   const fetchAppointmentsStats = async () => {
     try {
@@ -294,6 +296,7 @@ function Tables() {
                 >
                   Add Product
                 </Button>
+
               </MDBox>
               <MDBox pt={3}>
                 <DataTable
@@ -311,296 +314,326 @@ function Tables() {
       <Footer />
       {/* Product Modal */}
       <Dialog open={isProductModalOpen} onClose={handleCloseAddProductModal}>
-        <DialogTitle>Add New Product</DialogTitle>
-        <DialogContent>
-          {/* Product Fields */}
-          <TextField
-            name="productName"
-            label="Product Name"
-            value={newProduct.productName}
-            onChange={handleInputChangeNewProduct}
-            fullWidth
-            margin="dense"
-          />
-          <FormControl fullWidth margin="dense">
-            <InputLabel id="category-label">Category</InputLabel>
-            <Select
-              style={{ padding: "10px 0" }}
-              labelId="category-label"
-              name="category"
-              value={newProduct.category}
-              onChange={handleInputChangeNewProduct}
-              fullWidth
-            >
-              {/* Add all valid categories */}
-              <MenuItem value="Cpu">Cpu</MenuItem>
-              <MenuItem value="Gpu">Gpu</MenuItem>
-              <MenuItem value="Ram">Ram</MenuItem>
-              <MenuItem value="Storage">Storage</MenuItem>
-              <MenuItem value="Motherboard">Motherboard</MenuItem>
-              <MenuItem value="Psu">Psu</MenuItem>
-              <MenuItem value="Case">Case</MenuItem>
-              <MenuItem value="Cooling">Cooling</MenuItem>
-              <MenuItem value="others">others</MenuItem>
-            </Select>
-          </FormControl>
-          <TextField
-            name="manufacture"
-            label="Manufacture"
-            value={newProduct.manufacture}
-            onChange={handleInputChangeNewProduct}
-            fullWidth
-            margin="dense"
-          />
-          <TextField
-            name="price"
-            label="Price"
-            value={newProduct.price}
-            onChange={handleInputChangeNewProduct}
-            type="number"
-            fullWidth
-            margin="dense"
-          />
-          <TextField
-            name="stockQuantity"
-            label="Stock Quantity"
-            value={newProduct.stockQuantity}
-            onChange={handleInputChangeNewProduct}
-            type="number"
-            fullWidth
-            margin="dense"
-          />
+  <DialogTitle>Add New Product</DialogTitle>
+  <DialogContent>
+    {/* Product Fields */}
+    <TextField
+      name="productName"
+      label="Product Name"
+      value={newProduct.productName}
+      onChange={handleInputChangeNewProduct}
+      fullWidth
+      margin="dense"
+    />
+  <FormControl fullWidth margin="dense">
+    <InputLabel id="category-label">Category</InputLabel>
+    <Select
+    style={{ padding: "10px 0" }}
+      labelId="category-label"
+      name="category"
+      value={newProduct.category}
+      onChange={handleInputChangeNewProduct}
+      fullWidth
+    >
+      {/* Add all valid categories */}
+      <MenuItem value="Cpu">Cpu</MenuItem>
+      <MenuItem value="Gpu">Gpu</MenuItem>
+      <MenuItem value="Ram">Ram</MenuItem>
+      <MenuItem value="Storage">Storage</MenuItem>
+      <MenuItem value="Motherboard">Motherboard</MenuItem>
+      <MenuItem value="Psu">Psu</MenuItem>
+      <MenuItem value="Case">Case</MenuItem>
+      <MenuItem value="Cooling">Cooling</MenuItem>
+      <MenuItem value="others">others</MenuItem>
+    </Select>
+  </FormControl>
+    <TextField
+      name="manufacture"
+      label="Manufacture"
+      value={newProduct.manufacture}
+      onChange={handleInputChangeNewProduct}
+      fullWidth
+      margin="dense"
+    />
+    <TextField
+      name="price"
+      label="Price"
+      value={newProduct.price}
+      onChange={handleInputChangeNewProduct}
+      type="number"
+      fullWidth
+      margin="dense"
+    />
+    <TextField
+      name="stockQuantity"
+      label="Stock Quantity"
+      value={newProduct.stockQuantity}
+      onChange={handleInputChangeNewProduct}
+      type="number"
+      fullWidth
+      margin="dense"
+    />
 
-          {/* Dynamic Specifications Field */}
-          <div>
-            <Typography variant="h6" gutterBottom>
-              Specifications
-            </Typography>
-            {newProduct.specifications?.length > 0 &&
-              newProduct.specifications.map((spec, index) => (
-                <div key={index} style={{ display: "flex", gap: "10px", marginBottom: "10px" }}>
-                  {/* Key Input */}
-                  <TextField
-                    name={`key-${index}`}
-                    label="Specification Key"
-                    value={spec.key || ""}
-                    onChange={(e) => handleSpecificationChange(e, index, "key")}
-                    fullWidth
-                  />
-                  {/* Value Input */}
-                  <TextField
-                    name={`value-${index}`}
-                    label="Specification Value"
-                    value={spec.value || ""}
-                    onChange={(e) => handleSpecificationChange(e, index, "value")}
-                    fullWidth
-                  />
-                  {/* Remove Button */}
-                  <Button
-                    variant="outlined"
-                    color="secondary"
-                    onClick={() => handleRemoveSpecification(index)}
-                    style={{
-                      color: "red",
-                    }}
-                  >
-                    Remove
-                  </Button>
-                </div>
-              ))}
-            <Button
-              variant="outlined"
-              color="primary"
-              onClick={handleAddSpecification}
-              style={{ marginTop: "10px", color: "green" }}
-            >
-              Add Specification
-            </Button>
-          </div>
-
-          <TextField
-            name="releaseDate"
-            label="Release Date"
-            value={newProduct.releaseDate || new Date().toISOString().split("T")[0]}
-            onChange={handleInputChangeNewProduct}
-            type="date"
-            fullWidth
-            margin="dense"
-          />
-          <TextField
-            name="warrantyPeriod"
-            label="Warranty Period (Months)"
-            value={newProduct.warrantyPeriod}
-            onChange={handleInputChangeNewProduct}
-            type="number"
-            fullWidth
-            margin="dense"
-          />
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleCloseAddProductModal} color="secondary">
-            Cancel
-          </Button>
-          <Button onClick={handleSaveProduct} color="primary">
-            Save
-          </Button>
-        </DialogActions>
-      </Dialog>
-
-      {/* Modal for editing Products */}
-      <Dialog
-        open={isModalOpen}
-        onClose={handleCloseModal}
-        TransitionComponent={Fade}
-        TransitionProps={{ timeout: 500 }}
+{/* Dynamic Specifications Field */}
+<div>
+  <Typography variant="h6" gutterBottom>
+    Specifications
+  </Typography>
+{newProduct.specifications?.length > 0 &&
+  newProduct.specifications.map((spec, index) => (
+    <div key={index} style={{ display: "flex", gap: "10px", marginBottom: "10px" }}>
+      {/* Key Input */}
+      <TextField
+        name={`key-${index}`}
+        label="Specification Key"
+        value={spec.key || ""}
+        onChange={(e) => handleSpecificationChange(e, index, "key")}
+        fullWidth
+      />
+      {/* Value Input */}
+      <TextField
+        name={`value-${index}`}
+        label="Specification Value"
+        value={spec.value || ""}
+        onChange={(e) => handleSpecificationChange(e, index, "value")}
+        fullWidth
+      />
+      {/* Remove Button */}
+      <Button
+        variant="outlined"
+        color="secondary"
+        onClick={() => handleRemoveSpecification(index)}
+        style={{
+          color: 'red',
+        }}
       >
-        <DialogTitle>Edit Product Details</DialogTitle>
-        <DialogContent>
-          {editedProduct && (
-            <>
-              <TextField
-                name="productName"
-                label="Product Name"
-                value={editedProduct.productName}
-                onChange={handleInputChange}
-                fullWidth
-                margin="dense"
-              />
-              <TextField
-                name="category"
-                label="Category"
-                value={editedProduct.category}
-                onChange={handleInputChange}
-                fullWidth
-                margin="dense"
-              />
-              <TextField
-                name="manufacture"
-                label="Manufacturer"
-                value={editedProduct.manufacture}
-                onChange={handleInputChange}
-                fullWidth
-                margin="dense"
-              />
-              <TextField
-                name="price"
-                label="Price"
-                type="number"
-                value={editedProduct.price}
-                onChange={handleInputChange}
-                fullWidth
-                margin="dense"
-              />
-              <TextField
-                name="stockQuantity"
-                label="Stock Quantity"
-                type="number"
-                value={editedProduct.stockQuantity}
-                onChange={handleInputChange}
-                fullWidth
-                margin="dense"
-              />
-              <TextField
-                name="specifications"
-                label="Specifications"
-                value={editedProduct.specifications}
-                onChange={handleInputChange}
-                fullWidth
-                margin="dense"
-                multiline
-                rows={3}
-              />
-              <TextField
-                name="releaseDate"
-                label="Release Date"
-                type="date"
-                value={editedProduct.releaseDate}
-                onChange={handleInputChange}
-                fullWidth
-                margin="dense"
-                InputLabelProps={{
-                  shrink: true,
-                }}
-              />
-              <TextField
-                name="warrantyPeriod"
-                label="Warranty Period (Months)"
-                type="number"
-                value={editedProduct.warrantyPeriod}
-                onChange={handleInputChange}
-                fullWidth
-                margin="dense"
-              />
-              <TextField
-                name="offerPercentage"
-                label="Offer Percentage"
-                type="number"
-                value={editedProduct.offerPercentage}
-                onChange={handleInputChange}
-                fullWidth
-                margin="dense"
-              />
-              <TextField
-                name="overallRating"
-                label="Overall Rating"
-                type="number"
-                value={editedProduct.overallRating}
-                onChange={handleInputChange}
-                fullWidth
-                margin="dense"
-              />
-              <TextField
-                name="description"
-                label="Description"
-                value={editedProduct.description}
-                onChange={handleInputChange}
-                fullWidth
-                margin="dense"
-                multiline
-                rows={4}
-              />
-            </>
-          )}
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleCloseModal} color="secondary">
-            Cancel
-          </Button>
-          <Button onClick={handleSaveChanges} color="primary">
-            Save
-          </Button>
-        </DialogActions>
-      </Dialog>
+        Remove
+      </Button>
+    </div>
+  ))}
+  <Button
+    variant="outlined"
+    color="primary"
+    onClick={handleAddSpecification}
+    style={{ marginTop: "10px",
+      color:'green',
+     }}
+  >
+    Add Specification
+  </Button>
+</div>
 
-      {/* File Modal */}
-      <Dialog
-        open={isFileModalOpen}
-        onClose={closeFileModal}
-        TransitionComponent={Fade}
-        TransitionProps={{ timeout: 500 }}
+
+    <TextField
+      name="releaseDate"
+      label="Release Date"
+      value={newProduct.releaseDate || new Date().toISOString().split("T")[0] }
+      onChange={handleInputChangeNewProduct}
+      type="date"
+      fullWidth
+      margin="dense"
+    />
+    <TextField
+      name="warrantyPeriod"
+      label="Warranty Period (Months)"
+      value={newProduct.warrantyPeriod}
+      onChange={handleInputChangeNewProduct}
+      type="number"
+      fullWidth
+      margin="dense"
+    />
+  </DialogContent>
+  <DialogActions>
+    <Button onClick={handleCloseAddProductModal} color="secondary">
+      Cancel
+    </Button>
+    <Button onClick={handleSaveProduct} color="primary">
+      Save
+    </Button>
+  </DialogActions>
+</Dialog>
+
+{/* Modal for editing Products */}
+<Dialog
+  open={isModalOpen}
+  onClose={handleCloseModal}
+  TransitionComponent={Fade}
+  TransitionProps={{ timeout: 500 }}
+>
+  <DialogTitle>Edit Product Details</DialogTitle>
+  <DialogContent>
+    {editedProduct && (
+      <>
+        <TextField
+          name="productName"
+          label="Product Name"
+          value={editedProduct.productName}
+          onChange={handleInputChange}
+          fullWidth
+          margin="dense"
+        />
+        <TextField
+          name="category"
+          label="Category"
+          value={editedProduct.category}
+          onChange={handleInputChange}
+          fullWidth
+          margin="dense"
+        />
+        <TextField
+          name="manufacture"
+          label="Manufacturer"
+          value={editedProduct.manufacture}
+          onChange={handleInputChange}
+          fullWidth
+          margin="dense"
+        />
+        <TextField
+          name="price"
+          label="Price"
+          type="number"
+          value={editedProduct.price}
+          onChange={handleInputChange}
+          fullWidth
+          margin="dense"
+        />
+        <TextField
+          name="stockQuantity"
+          label="Stock Quantity"
+          type="number"
+          value={editedProduct.stockQuantity}
+          onChange={handleInputChange}
+          fullWidth
+          margin="dense"
+        />
+        <TextField
+          name="specifications"
+          label="Specifications"
+          value={editedProduct.specifications}
+          onChange={handleInputChange}
+          fullWidth
+          margin="dense"
+          multiline
+          rows={3}
+        />
+        <TextField
+          name="releaseDate"
+          label="Release Date"
+          type="date"
+          value={editedProduct.releaseDate}
+          onChange={handleInputChange}
+          fullWidth
+          margin="dense"
+          InputLabelProps={{
+            shrink: true,
+          }}
+        />
+        <TextField
+          name="warrantyPeriod"
+          label="Warranty Period (Months)"
+          type="number"
+          value={editedProduct.warrantyPeriod}
+          onChange={handleInputChange}
+          fullWidth
+          margin="dense"
+        />
+        <TextField
+          name="offerPercentage"
+          label="Offer Percentage"
+          type="number"
+          value={editedProduct.offerPercentage}
+          onChange={handleInputChange}
+          fullWidth
+          margin="dense"
+        />
+        <TextField
+          name="overallRating"
+          label="Overall Rating"
+          type="number"
+          value={editedProduct.overallRating}
+          onChange={handleInputChange}
+          fullWidth
+          margin="dense"
+        />
+        <TextField
+          name="description"
+          label="Description"
+          value={editedProduct.description}
+          onChange={handleInputChange}
+          fullWidth
+          margin="dense"
+          multiline
+          rows={4}
+        />
+      </>
+    )}
+  </DialogContent>
+  <DialogActions>
+    <Button onClick={handleCloseModal} color="secondary">
+      Cancel
+    </Button>
+    <Button onClick={handleSaveChanges} color="primary">
+      Save
+    </Button>
+  </DialogActions>
+</Dialog>
+
+ {/* File Modal */}
+<Dialog
+  open={isFileModalOpen}
+  onClose={closeFileModal}
+  TransitionComponent={Fade}
+  TransitionProps={{ timeout: 500 }}
+  fullWidth
+  maxWidth="sm"
+>
+  <DialogTitle>Edit Product Image</DialogTitle>
+  <DialogContent>
+    <Box display="flex" flexDirection="column" alignItems="center" gap={2}>
+      {/* Image Preview */}
+      {imagePreview && (
+        <Box
+          component="img"
+          src={imagePreview}
+          alt="Product Preview"
+          sx={{
+            width: "100%",
+            height: "auto",
+            maxHeight: 300,
+            borderRadius: 2,
+            objectFit: "contain",
+            border: "1px solid #ccc",
+          }}
+        />
+      )}
+
+      {/* File Input */}
+      <Button
+        // variant="outlined"
+        component="label"
+        fullWidth
       >
-        <DialogTitle>Edit Product Image</DialogTitle>
-        <DialogContent>
-          {/* Product Fields */}
-          <TextField
-            name="image"
-            label="Product Image"
-            onChange={handleFileChange}
-            fullWidth
-            margin="dense"
-            type="file"
-            focused={true}
-          />
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={closeFileModal} color="secondary">
-            Cancel
-          </Button>
+        Upload Product Image
+        <input
+          hidden
+          accept="image/*"
+          type="file"
+          name="image"
+          onChange={handleFileChange}
+        />
+      </Button>
+    </Box>
+  </DialogContent>
+  <DialogActions>
+    <Button onClick={closeFileModal} color="secondary">
+      Cancel
+    </Button>
           <Button onClick={handleUploadImage} color="primary">
-            Save
-          </Button>
-        </DialogActions>
-      </Dialog>
+      Save
+    </Button>
+  </DialogActions>
+</Dialog>
+
 
       {/* Notification Snackbar */}
       <MDSnackbar

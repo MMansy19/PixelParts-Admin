@@ -31,9 +31,11 @@ export default function productsTableData() {
   const [selectedFile, setSelectedFile] = useState(null);
   const [isFileModalOpen, setIsFileModalOpen] = useState(false);
   const [selectedId, setSelectedId] = useState(null);
+  const [imagePreview, setImagePreview] = useState(null);
 
   const handleFileChange = (e) => {
-    setSelectedFile(e.target.files[0]);
+      setImagePreview(URL.createObjectURL(e.target.files[0]));
+      setSelectedFile(e.target.files[0]);
   };
 
   const handleOpenFileModal = (productId) => {
@@ -289,5 +291,6 @@ export default function productsTableData() {
     handleFileChange,
     isFileModalOpen,
     closeFileModal,
+    imagePreview,
   };
 }
