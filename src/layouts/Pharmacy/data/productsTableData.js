@@ -47,6 +47,34 @@ export default function productsTableData() {
     setIsFileModalOpen(true);
   };
 
+  const handleDeleteProduct = async (productId) => {
+    try {
+      const token = Cookies.get("authToken");
+      if (!token) {
+        throw new Error("Unauthorized access");
+      }
+      await Axios.delete(
+        `https://pixelparts-dev-api.up.railway.app/api/v1/product/deleteProduct/${productId}`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+      setNotification({
+        open: true,
+        message: "Product deleted successfully.",
+        severity: "success",
+      });
+    } catch (error) {
+      console.error("Error deleting product:", error);
+      setNotification({ open: true,
+        message: "Failed to delete product. Please try again.",
+        severity: "error",
+      });
+    } finally {
+      closeFileModal();
+    }
+  };
+
   const handleCloseNotification = () => {
     setNotification((prev) => ({ ...prev, open: false }));
   };
@@ -65,7 +93,7 @@ export default function productsTableData() {
       const formData = new FormData();
       formData.append("image", selectedFile);
       const response = await Axios.patch(
-        `https://mediportal-api-production.up.railway.app/api/v1/products/${selectedId}`,
+        `https://pixelparts-dev-api.up.railway.app/api/v1/products/${selectedId}`,
         formData,
         {
           headers: {
@@ -164,7 +192,7 @@ export default function productsTableData() {
       console.log("Updated fields:", updatedFields);
 
       await Axios.patch(
-        `https://mediportal-api-production.up.railway.app/api/v1/products/${editedProduct.productId}`,
+        `https://pixelparts-dev-api.up.railway.app/api/v1/products/${editedProduct.productId}`,
         updatedFields,
         {
           headers: { Authorization: `Bearer ${token}` },
@@ -192,7 +220,7 @@ export default function productsTableData() {
   const fetchProducts = async () => {
     try {
       const response = await Axios.get(
-        "https://mediportal-api-production.up.railway.app/api/v1/products/allProducts"
+        "https://pixelparts-dev-api.up.railway.app/api/v1/products/allProducts"
       );
       const productsData = response.data.data.products;
       setProducts(productsData);
@@ -268,6 +296,13 @@ export default function productsTableData() {
                 onClick={() => handleOpenFileModal(product.productid)}
               >
                 Edit Image
+              </Button>
+              <Button 
+                variant="text" 
+                color="error" 
+                onClick={() => handleDeleteProduct(product.productid)}   
+              >
+                Delete
               </Button>
             </div>
           ),

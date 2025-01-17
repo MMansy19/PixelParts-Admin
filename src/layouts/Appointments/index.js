@@ -56,12 +56,16 @@ function Tables() {
     isModalOpen,
     isFileModalOpen,
     closeFileModal,
+    isDeleteModalOpen,
+    closeDeleteModal,
     handleCloseModal,
     notification,
     setNotification,
     handleCloseNotification,
     handleUploadImage,
     imagePreview,
+    handleDeleteProduct,
+    selectedId,
   } = appData();
   const handleAddProductClick = () => {
     setIsProductModalOpen(true); // Open modal for adding new product
@@ -619,6 +623,30 @@ function Tables() {
           </Button>
           <Button onClick={handleUploadImage} color="primary">
             Save
+          </Button>
+        </DialogActions>
+      </Dialog>
+      {/* Confirm Deletion */}
+      <Dialog
+        open={isDeleteModalOpen}
+        onClose={closeFileModal}
+        TransitionComponent={Fade}
+        TransitionProps={{ timeout: 500 }}
+        fullWidth
+        maxWidth="sm"
+      >
+        <DialogTitle>Confirm Deletion</DialogTitle>
+        <DialogContent>
+          <MDTypography variant="body1" color="textSecondary">
+            Are you sure you want to delete this product?
+          </MDTypography>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={closeDeleteModal} color="secondary">
+            Cancel
+          </Button>
+          <Button onClick={() => handleDeleteProduct(selectedId)} color="primary">
+            Confirm
           </Button>
         </DialogActions>
       </Dialog>

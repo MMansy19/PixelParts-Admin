@@ -28,6 +28,7 @@ export default function productsTableData() {
     overallRating: "",
   });
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [selectedFile, setSelectedFile] = useState(null);
   const [isFileModalOpen, setIsFileModalOpen] = useState(false);
   const [selectedId, setSelectedId] = useState(null);
@@ -42,6 +43,11 @@ export default function productsTableData() {
     setSelectedId(productId);
     setSelectedFile(null);
     setIsFileModalOpen(true);
+  };
+
+  const openDeleteModal = (productId) => {
+    setSelectedId(productId);
+    setIsDeleteModalOpen(true);
   };
 
   const handleCloseNotification = () => {
@@ -116,6 +122,10 @@ export default function productsTableData() {
     setSelectedFile(null);
   };
 
+  const closeDeleteModal = () => {
+    setIsDeleteModalOpen(false);
+  };
+
   const handleCloseModal = () => {
     setIsModalOpen(false);
     setEditedProduct({
@@ -137,6 +147,35 @@ export default function productsTableData() {
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setEditedProduct((prev) => ({ ...prev, [name]: value }));
+  };
+
+  
+  const handleDeleteProduct = async (productId) => {
+    try {
+      const token = Cookies.get("authToken");
+      if (!token) {
+        throw new Error("Unauthorized access");
+      }
+      await Axios.delete(
+        `https://pixelparts-dev-api.up.railway.app/api/v1/product/deleteProduct/${productId}`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+      setNotification({
+        open: true,
+        message: "Product deleted successfully.",
+        severity: "success",
+      });
+    } catch (error) {
+      console.error("Error deleting product:", error);
+      setNotification({ open: true,
+        message: "Failed to delete product. Please try again.",
+        severity: "error",
+      });
+    } finally {
+      closeDeleteModal();
+    }
   };
 
   const fetchProducts = async () => {
@@ -258,6 +297,13 @@ export default function productsTableData() {
               >
                 Edit Image
               </Button>
+                <Button 
+                variant="text" 
+                color="error" 
+                onClick={() => openDeleteModal(product.productid)}   
+              >
+                Delete
+              </Button>
             </div>
           ),
         }));
@@ -292,5 +338,9 @@ export default function productsTableData() {
     isFileModalOpen,
     closeFileModal,
     imagePreview,
+    handleDeleteProduct,
+    isDeleteModalOpen,
+    closeDeleteModal,
+    selectedId,
   };
 }
