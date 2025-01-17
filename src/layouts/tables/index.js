@@ -23,7 +23,6 @@ import { useState } from "react";
 
 // Data
 import doctorsTableData from "layouts/tables/data/doctorsTableData";
-import patientsTableData from "layouts/tables/data/patientsTableData";
 
 function Tables() {
   const [currentPage, setCurrentPage] = useState(0);
@@ -41,17 +40,6 @@ function Tables() {
     notification,
     handleCloseNotification,
   } = doctorsTableData();
-  const {
-    columns: pColumns,
-    rows: pRows,
-    isModalOpen: isModalOpenPatients,
-    handleCloseModal: handleCloseModalPatients,
-    handleInputChange: handleInputChangePatients,
-    handleSaveChanges: handleSaveChangesPatients,
-    editedPatient,
-    notification: notificationPatients,
-    handleCloseNotification: handleCloseNotificationPatients,
-  } = patientsTableData();
 
   const handlePageChange = (page) => {
     setCurrentPage(page); // Update the current page when it changes
@@ -151,175 +139,76 @@ function Tables() {
               </MDBox>
             </Card>
           </Grid>
-          <Grid item xs={12}>
-            <Card>
-              <MDBox
-                mx={2}
-                mt={-3}
-                py={3}
-                px={2}
-                variant="gradient"
-                bgColor="info"
-                borderRadius="lg"
-                coloredShadow="info"
-              >
-                <MDTypography variant="h6" color="white">
-                  Patients Table
-                </MDTypography>
-              </MDBox>
-              <MDBox pt={3}>
-                <DataTable
-                  table={{ columns: pColumns, rows: pRows }}
-                  isSorted={true}
-                  entriesPerPage={false}
-                  showTotalEntries
-                  noEndBorder
-                />
-              </MDBox>
-            </Card>
-          </Grid>
         </Grid>
       </MDBox>
       <Footer />
 
-      {/* Modal for editing doctor */}
-      <Dialog
-        open={isModalOpen}
-        onClose={handleCloseModal}
-        TransitionComponent={Fade}
-        TransitionProps={{ timeout: 500 }}
-      >
-        <DialogTitle>Edit User</DialogTitle>
-        <DialogContent>
-          {editedUser && (
-            <>
-              <TextField
-                name="firstname"
-                label="First Name"
-                value={editedUser.firstname || ""}
-                onChange={handleInputChange}
-                fullWidth
-                margin="dense"
-              />
-              <TextField
-                name="lastname"
-                label="Last Name"
-                value={editedUser.lastname || ""}
-                onChange={handleInputChange}
-                fullWidth
-                margin="dense"
-              />
-              <TextField
-                name="specialization"
-                label="Specialization"
-                value={editedUser.specialization || ""}
-                onChange={handleInputChange}
-                fullWidth
-                margin="dense"
-              />
-              <TextField
-                name="yearsofexperience"
-                label="Years of Experience"
-                type="number"
-                value={editedUser.yearsofexperience || ""}
-                onChange={handleInputChange}
-                fullWidth
-                margin="dense"
-              />
-              {/* Select box for status */}
-              <Select
-                name="userstate"
-                value={editedUser.userstate || ""}
-                onChange={handleInputChange}
-                fullWidth
-                margin="dense"
+<Dialog
+  open={isModalOpen}
+  onClose={handleCloseModal}
+  TransitionComponent={Fade}
+  TransitionProps={{ timeout: 500 }}
+>
+  <DialogTitle>Edit User</DialogTitle>
+  <DialogContent>
+    {editedUser && (
+      <>
+        <TextField
+          name="firstname"
+          label="First Name"
+          value={editedUser.firstname || ""}
+          onChange={handleInputChange}
+          fullWidth
+          margin="dense"
+        />
+        <TextField
+          name="lastname"
+          label="Last Name"
+          value={editedUser.lastname || ""}
+          onChange={handleInputChange}
+          fullWidth
+          margin="dense"
+        />
+        <TextField
+          name="email"
+          label="Email"
+          value={editedUser.email || ""}
+          onChange={handleInputChange}
+          fullWidth
+          margin="dense"
+        />
+        <TextField
+          name="phonenumber"
+          label="Phone Number"
+          value={editedUser.phonenumber || ""}
+          onChange={handleInputChange}
+          fullWidth
+          margin="dense"
+        />
+        <Select
+          name="userstate"
+          value={editedUser.userstate || ""}
+          onChange={handleInputChange}
+          fullWidth
+          margin="dense"
                 style={{ marginTop: "1px", padding: "11px" }}
-              >
-                <MenuItem value="Active">Active</MenuItem>
-                <MenuItem value="Pending">Pending</MenuItem>
-                <MenuItem value="Blocked">Blocked</MenuItem>
-              </Select>
-            </>
-          )}
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleCloseModal} color="secondary">
-            Cancel
-          </Button>
-          <Button onClick={handleSaveChanges} color="primary">
-            Save
-          </Button>
-        </DialogActions>
-      </Dialog>
-
-      {/* Modal for editing patients */}
-      <Dialog
-        open={isModalOpenPatients}
-        onClose={handleCloseModalPatients}
-        TransitionComponent={Fade}
-        TransitionProps={{ timeout: 500 }}
-      >
-        <DialogTitle>Edit Patient</DialogTitle>
-        <DialogContent>
-          {editedPatient && (
-            <>
-              <TextField
-                name="firstname"
-                label="First Name"
-                value={editedPatient.firstname || ""}
-                onChange={handleInputChangePatients}
-                fullWidth
-                margin="dense"
-              />
-              <TextField
-                name="lastname"
-                label="Last Name"
-                value={editedPatient.lastname || ""}
-                onChange={handleInputChangePatients}
-                fullWidth
-                margin="dense"
-              />
-              <TextField
-                name="email"
-                label="Email"
-                value={editedPatient.email || ""}
-                onChange={handleInputChangePatients}
-                fullWidth
-                margin="dense"
-              />
-              <TextField
-                name="phonenumber"
-                label="Phone Number"
-                value={editedPatient.phonenumber || ""}
-                onChange={handleInputChangePatients}
-                fullWidth
-                margin="dense"
-              />
-              {/* Select box for status */}
-              <Select
-                name="userstate"
-                value={editedPatient.userstate || ""}
-                onChange={handleInputChangePatients}
-                fullWidth
-                margin="dense"
-                style={{ marginTop: "1px", padding: "11px" }}
-              >
-                <MenuItem value="Active">Active</MenuItem>
-                <MenuItem value="Pending">Pending</MenuItem>
-                <MenuItem value="Blocked">Blocked</MenuItem>
-              </Select>
-            </>
-          )}
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleCloseModalPatients} color="secondary">
-            Cancel
-          </Button>
-          <Button onClick={handleSaveChangesPatients} color="primary">
-            Save
-          </Button>
-        </DialogActions>
-      </Dialog>
+        >
+          <MenuItem value="Active">Active</MenuItem>
+          <MenuItem value="Pending">Pending</MenuItem>
+          <MenuItem value="Blocked">Blocked</MenuItem>
+        </Select>
+      </>
+    )}
+  </DialogContent>
+  <DialogActions>
+    <Button onClick={handleCloseModal} color="secondary">
+      Cancel
+    </Button>
+    <Button onClick={handleSaveChanges} color="primary">
+      Save
+    </Button>
+  </DialogActions>
+</Dialog>
 
       {/* Notification Snackbar */}
       <MDSnackbar
@@ -330,16 +219,6 @@ function Tables() {
         open={notification.open}
         onClose={handleCloseNotification}
         close={handleCloseNotification}
-        bgWhite
-      />
-      <MDSnackbar
-        color={notificationPatients.severity}
-        icon={notificationPatients.severity === "success" ? "check" : "error"}
-        title={notificationPatients.severity === "success" ? "Success" : "Error"}
-        content={notificationPatients.message}
-        open={notificationPatients.open}
-        onClose={handleCloseNotificationPatients}
-        close={handleCloseNotificationPatients}
         bgWhite
       />
     </DashboardLayout>

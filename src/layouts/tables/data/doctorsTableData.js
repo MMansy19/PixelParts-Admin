@@ -70,7 +70,15 @@ export default function usersTableData() {
 
   const handleEditClick = (user) => {
     setSelectedUser(user);
-    setEditedUser({ ...user });
+    setEditedUser({
+    userid: user.userid,
+    firstname: user.firstname,
+    lastname: user.lastname,
+    email: user.email,
+    phonenumber: user.phonenumber,
+    birthdate: user.birthdate,
+    userstate: user.userstate,
+  });
     setIsModalOpen(true);
   };
 
@@ -82,7 +90,7 @@ export default function usersTableData() {
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setEditedUser((prev) => ({ ...prev, [name]: value }));
+    setEditedUser({ ...editedUser, [name]: value });
   };
 
   const handleSaveChanges = async () => {
