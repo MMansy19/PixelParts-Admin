@@ -37,7 +37,7 @@ function Tables() {
     handleCloseModal,
     handleInputChange,
     handleSaveChanges,
-    editedDoctor,
+    editedUser,
     notification,
     handleCloseNotification,
   } = doctorsTableData();
@@ -67,7 +67,7 @@ function Tables() {
               <ComplexStatisticsCard
                 color="dark"
                 icon="people"
-                title="All Doctors"
+                title="All Users"
                 count={activeCount + pendingCount + blockedCount}
                 percentage={{
                   color: "success",
@@ -81,7 +81,7 @@ function Tables() {
             <MDBox mb={1.5}>
               <ComplexStatisticsCard
                 icon="timer"
-                title="Pending Doctors"
+                title="Pending Users"
                 count={pendingCount}
                 color="warning"
                 percentage={{
@@ -97,7 +97,7 @@ function Tables() {
               <ComplexStatisticsCard
                 color="success"
                 icon="done"
-                title="Active Doctors"
+                title="Active Users"
                 count={activeCount}
                 percentage={{
                   color: "success",
@@ -112,7 +112,7 @@ function Tables() {
               <ComplexStatisticsCard
                 color="error"
                 icon="block"
-                title="Blocked Doctors"
+                title="Blocked Users"
                 count={blockedCount}
                 percentage={{
                   color: "success",
@@ -189,14 +189,14 @@ function Tables() {
         TransitionComponent={Fade}
         TransitionProps={{ timeout: 500 }}
       >
-        <DialogTitle>Edit Doctor</DialogTitle>
+        <DialogTitle>Edit User</DialogTitle>
         <DialogContent>
-          {editedDoctor && (
+          {editedUser && (
             <>
               <TextField
                 name="firstname"
                 label="First Name"
-                value={editedDoctor.firstname || ""}
+                value={editedUser.firstname || ""}
                 onChange={handleInputChange}
                 fullWidth
                 margin="dense"
@@ -204,7 +204,7 @@ function Tables() {
               <TextField
                 name="lastname"
                 label="Last Name"
-                value={editedDoctor.lastname || ""}
+                value={editedUser.lastname || ""}
                 onChange={handleInputChange}
                 fullWidth
                 margin="dense"
@@ -212,7 +212,7 @@ function Tables() {
               <TextField
                 name="specialization"
                 label="Specialization"
-                value={editedDoctor.specialization || ""}
+                value={editedUser.specialization || ""}
                 onChange={handleInputChange}
                 fullWidth
                 margin="dense"
@@ -221,7 +221,7 @@ function Tables() {
                 name="yearsofexperience"
                 label="Years of Experience"
                 type="number"
-                value={editedDoctor.yearsofexperience || ""}
+                value={editedUser.yearsofexperience || ""}
                 onChange={handleInputChange}
                 fullWidth
                 margin="dense"
@@ -229,7 +229,7 @@ function Tables() {
               {/* Select box for status */}
               <Select
                 name="userstate"
-                value={editedDoctor.userstate || ""}
+                value={editedUser.userstate || ""}
                 onChange={handleInputChange}
                 fullWidth
                 margin="dense"
