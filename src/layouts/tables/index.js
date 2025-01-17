@@ -149,11 +149,11 @@ function Tables() {
   TransitionComponent={Fade}
   TransitionProps={{ timeout: 500 }}
 >
-  <DialogTitle>Edit User</DialogTitle>
+  <DialogTitle>Update User State</DialogTitle>
   <DialogContent>
     {editedUser && (
       <>
-        <TextField
+        {/* <TextField
           name="firstname"
           label="First Name"
           value={editedUser.firstname || ""}
@@ -184,14 +184,15 @@ function Tables() {
           onChange={handleInputChange}
           fullWidth
           margin="dense"
-        />
+        /> */}
         <Select
-          name="userstate"
-          value={editedUser.userstate || ""}
+          name="userState"
+          label="User State"
+          value={editedUser.userState || ""}
           onChange={handleInputChange}
           fullWidth
           margin="dense"
-                style={{ marginTop: "1px", padding: "11px" }}
+          style={{ marginTop: "1px", padding: "11px" }}
         >
           <MenuItem value="Active">Active</MenuItem>
           <MenuItem value="Pending">Pending</MenuItem>

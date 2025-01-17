@@ -46,12 +46,16 @@ export default function usersTableData() {
           },
         }
       );
-      const usersData = response.data.data.users;
+      //make user state to be userState
+      const usersData = response.data.data.users.map((user) => ({
+        ...user,
+        userState: user.userstate,
+      }));
       setUsers(usersData);
       console.log("usersData:", usersData);
-      setActiveCount(usersData.filter((user) => user.userstate === "Active").length);
-      setPendingCount(usersData.filter((user) => user.userstate === "Pending").length);
-      setBlockedCount(usersData.filter((user) => user.userstate === "Blocked").length);
+      setActiveCount(usersData.filter((user) => user.userState === "Active").length);
+      setPendingCount(usersData.filter((user) => user.userState === "Pending").length);
+      setBlockedCount(usersData.filter((user) => user.userState === "Blocked").length);
     } catch (error) {
       console.error("Error fetching users:", error);
       setNotification({
@@ -77,7 +81,7 @@ export default function usersTableData() {
     email: user.email,
     phonenumber: user.phonenumber,
     birthdate: user.birthdate,
-    userstate: user.userstate,
+    userState: user.userState,
   });
     setIsModalOpen(true);
   };
@@ -121,7 +125,7 @@ export default function usersTableData() {
       console.log("Updated fields:", updatedFields);
       // Make the API call with only updated fields
       const response = await Axios.patch(
-        `https://mediportal-api-production.up.railway.app/api/v1/user/updateUser/${editedUser.userid}`,
+        `https://pixelparts-dev-api.up.railway.app/api/v1/user/updateUser/${editedUser.userid}`,
         updatedFields,
         {
           headers: {
@@ -205,11 +209,11 @@ const rows = useMemo(() => {
         createdAt: new Date(user.createdat).toLocaleDateString(),
         status: (
           <MDBadge
-            badgeContent={user.userstate}
+            badgeContent={user.userState}
             color={
-              user.userstate === "Active"
+              user.userState === "Active"
                 ? "success"
-                : user.userstate === "Pending"
+                : user.userState === "Pending"
                 ? "warning"
                 : "error"
             }
