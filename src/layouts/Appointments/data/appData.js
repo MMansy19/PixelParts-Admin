@@ -34,8 +34,8 @@ export default function productsTableData() {
   const [imagePreview, setImagePreview] = useState(null);
 
   const handleFileChange = (e) => {
-      setImagePreview(URL.createObjectURL(e.target.files[0]));
-      setSelectedFile(e.target.files[0]);
+    setImagePreview(URL.createObjectURL(e.target.files[0]));
+    setSelectedFile(e.target.files[0]);
   };
 
   const handleOpenFileModal = (productId) => {

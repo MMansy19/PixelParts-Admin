@@ -12,16 +12,16 @@ import PropTypes from "prop-types";
 import Cookies from "js-cookie";
 import { useMemo } from "react";
 
-export default function doctorsTableData() {
+export default function usersTableData() {
   const navigate = useNavigate();
-  const [doctors, setDoctors] = useState([]);
+  const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [activeCount, setActiveCount] = useState(0);
   const [pendingCount, setPendingCount] = useState(0);
   const [blockedCount, setBlockedCount] = useState(0);
-  const [selectedDoctor, setSelectedDoctor] = useState(null);
+  const [selectedUser, setSelectedUser] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [editedDoctor, setEditedDoctor] = useState(null);
+  const [editedUser, setEditedUser] = useState(null);
 
   // Notification state
   const [notification, setNotification] = useState({
@@ -34,22 +34,29 @@ export default function doctorsTableData() {
     setNotification((prev) => ({ ...prev, open: false }));
   };
 
-  const fetchDoctors = async () => {
+  const fetchusers = async () => {
+    const token = Cookies.get("authToken");
     try {
       const response = await Axios.get(
-        "https://pixelparts-dev-api.up.railway.app/api/v1/user/getAllUsers"
+        "https://pixelparts-dev-api.up.railway.app/api/v1/user/getAllUsers",
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${token}`,
+          },
+        }
       );
-      // const doctorsData = response.data.data.doctors;
-      const doctorsData = response.data.data;
-      setDoctors(doctorsData);
-      setActiveCount(doctorsData.filter((doctor) => doctor.userstate === "Active").length);
-      setPendingCount(doctorsData.filter((doctor) => doctor.userstate === "Pending").length);
-      setBlockedCount(doctorsData.filter((doctor) => doctor.userstate === "Blocked").length);
+      const usersData = response.data.data.users;
+      setUsers(usersData);
+      console.log("usersData:", usersData);
+      setActiveCount(usersData.filter((user) => user.userstate === "Active").length);
+      setPendingCount(usersData.filter((user) => user.userstate === "Pending").length);
+      setBlockedCount(usersData.filter((user) => user.userstate === "Blocked").length);
     } catch (error) {
-      console.error("Error fetching doctors:", error);
+      console.error("Error fetching users:", error);
       setNotification({
         open: true,
-        message: "Failed to fetch doctors. Please try again.",
+        message: "Failed to fetch users. Please try again.",
         severity: "error",
       });
     } finally {
@@ -58,24 +65,24 @@ export default function doctorsTableData() {
   };
 
   useEffect(() => {
-    fetchDoctors();
+    fetchusers();
   }, []);
 
-  const handleEditClick = (doctor) => {
-    setSelectedDoctor(doctor);
-    setEditedDoctor({ ...doctor });
+  const handleEditClick = (user) => {
+    setSelectedUser(user);
+    setEditedUser({ ...user });
     setIsModalOpen(true);
   };
 
   const handleCloseModal = () => {
     setIsModalOpen(false);
-    setSelectedDoctor(null);
-    setEditedDoctor(null);
+    setSelectedUser(null);
+    setEditedUser(null);
   };
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setEditedDoctor((prev) => ({ ...prev, [name]: value }));
+    setEditedUser((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleSaveChanges = async () => {
@@ -86,10 +93,10 @@ export default function doctorsTableData() {
         throw new Error("No authorization token found. Please log in again.");
       }
 
-      // Determine changed fields by comparing `editedDoctor` with `selectedDoctor`
-      const updatedFields = Object.keys(editedDoctor).reduce((changes, key) => {
-        if (editedDoctor[key] !== selectedDoctor[key]) {
-          changes[key] = editedDoctor[key];
+      // Determine changed fields by comparing `editedUser` with `selectedUser`
+      const updatedFields = Object.keys(editedUser).reduce((changes, key) => {
+        if (editedUser[key] !== selectedUser[key]) {
+          changes[key] = editedUser[key];
         }
         return changes;
       }, {});
@@ -106,7 +113,7 @@ export default function doctorsTableData() {
       console.log("Updated fields:", updatedFields);
       // Make the API call with only updated fields
       const response = await Axios.patch(
-        `https://mediportal-api-production.up.railway.app/api/v1/doctors/${editedDoctor.userid}`,
+        `https://mediportal-api-production.up.railway.app/api/v1/user/updateUser/${editedUser.userid}`,
         updatedFields,
         {
           headers: {
@@ -115,12 +122,12 @@ export default function doctorsTableData() {
         }
       );
 
-      // Fetch updated doctors and close the modal
-      fetchDoctors();
+      // Fetch updated users and close the modal
+      fetchusers();
       setIsModalOpen(false);
       setNotification({
         open: true,
-        message: "Doctor updated successfully!",
+        message: "user updated successfully!",
         severity: "success",
       });
     } catch (error) {
@@ -128,10 +135,10 @@ export default function doctorsTableData() {
         console.error("Unauthorized access - redirecting to login.");
         navigate("/authentication/sign-in");
       } else {
-        console.error("Failed to update doctor:", error);
+        console.error("Failed to update user:", error);
         setNotification({
           open: true,
-          message: error.response?.data?.message || "Failed to update doctor. Please try again.",
+          message: error.response?.data?.message || "Failed to update user. Please try again.",
           severity: "error",
         });
       }
@@ -150,59 +157,67 @@ export default function doctorsTableData() {
     </MDBox>
   );
 
-  const rows = useMemo(() => {
-    return loading
-      ? [
-          {
-            doctorId: "Loading...",
-            Doctor: (
-              <MDBox display="flex" justifyContent="center" alignItems="center" width="100%">
-                <CircularProgress size={24} />
-              </MDBox>
-            ),
-            specialization: "Loading...",
-            status: (
-              <MDBox ml={-1}>
-                <MDBadge badgeContent="loading" color="light" variant="gradient" size="sm" />
-              </MDBox>
-            ),
-            employed: "Loading...",
-            action: "Loading...",
-          },
-        ]
-      : doctors.map((doctor) => ({
-          key: doctor.userid,
-          doctorId: doctor.userid,
-          Doctor: (
-            <Author
-              image={doctor.userimg || "https://via.placeholder.com/150"}
-              name={`${doctor.firstname} ${doctor.lastname}`}
-              email={doctor.email}
-            />
+const rows = useMemo(() => {
+  return loading
+    ? [
+        {
+          userId: "Loading...",
+          User: (
+            <MDBox display="flex" justifyContent="center" alignItems="center" width="100%">
+              <CircularProgress size={24} />
+            </MDBox>
           ),
-          specialization: doctor.specialization,
+          phoneNumber: "Loading...",
+          email: "Loading...",
+          birthdate: "Loading...",
+          createdAt: "Loading...",
           status: (
-            <MDBadge
-              badgeContent={doctor.userstate}
-              color={
-                doctor.userstate === "Active"
-                  ? "success"
-                  : doctor.userstate === "Pending"
-                  ? "warning"
-                  : "error"
-              }
-              variant="gradient"
-              size="sm"
-            />
+            <MDBox ml={-1}>
+              <MDBadge badgeContent="loading" color="light" variant="gradient" size="sm" />
+            </MDBox>
           ),
-          employed: new Date(doctor.createdat).toLocaleDateString(),
-          action: (
-            <Button variant="text" color="primary" onClick={() => handleEditClick(doctor)}>
-              Edit
-            </Button>
-          ),
-        }));
-  }, [loading, doctors]);
+          action: "Loading...",
+        },
+      ]
+    : users
+    ? users.map((user) => ({
+        key: user.userid,
+        userId: user.userid,
+        User: (
+          <Author
+            image={user.userimg || `https://ui-avatars.com/api/?name=${user.firstname}+${user.lastname}`}
+            name={`${user.firstname} ${user.lastname}`}
+            username={user.username}
+            email={user.email}
+          />
+        ),
+        phoneNumber: user.phonenumber,
+        email: user.email,
+        birthdate: new Date(user.birthdate).toLocaleDateString(),
+        createdAt: new Date(user.createdat).toLocaleDateString(),
+        status: (
+          <MDBadge
+            badgeContent={user.userstate}
+            color={
+              user.userstate === "Active"
+                ? "success"
+                : user.userstate === "Pending"
+                ? "warning"
+                : "error"
+            }
+            variant="gradient"
+            size="sm"
+          />
+        ),
+        action: (
+          <Button variant="text" color="primary" onClick={() => handleEditClick(user)}>
+            Edit
+          </Button>
+        ),
+      }))
+    : 'No users to display.';
+}, [loading, users]);
+
 
   Author.propTypes = {
     image: PropTypes.string.isRequired,
@@ -211,25 +226,27 @@ export default function doctorsTableData() {
   };
 
   return {
-    columns: [
-      { Header: "Doctor", accessor: "Doctor", width: "35%", align: "left" },
-      { Header: "Doctor ID", accessor: "doctorId", width: "15%", align: "center" },
-      { Header: "Specialization", accessor: "specialization", align: "left" },
-      { Header: "Status", accessor: "status", align: "center" },
-      { Header: "Employed", accessor: "employed", align: "center" },
-      { Header: "Action", accessor: "action", align: "center" },
-    ],
-    rows: rows,
+  columns : [
+  { Header: "User", accessor: "User", width: "35%", align: "left" },
+  { Header: "User ID", accessor: "userId", width: "15%", align: "center" },
+  { Header: "Phone Number", accessor: "phoneNumber", align: "left" },
+  { Header: "Email", accessor: "email", align: "left" },
+  { Header: "Birthdate", accessor: "birthdate", align: "center" },
+  { Header: "Created At", accessor: "createdAt", align: "center" },
+  { Header: "Status", accessor: "status", align: "center" },
+  { Header: "Action", accessor: "action", align: "center" },
+  ],
+  rows: rows,
     activeCount,
     pendingCount,
     blockedCount,
 
-    // Modal for editing doctor
+    // Modal for editing user
     isModalOpen,
     handleCloseModal,
     handleInputChange,
     handleSaveChanges,
-    editedDoctor,
+    editedUser,
 
     // Notification snackbar
     notification,
