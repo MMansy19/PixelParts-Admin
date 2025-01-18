@@ -39,11 +39,10 @@ Coded by www.creative-tim.com
 import Dashboard from "layouts/dashboard";
 import Tables from "layouts/tables";
 import SignIn from "layouts/authentication/sign-in";
-import Insurances from "layouts/Insurances";
 import AddUser from "layouts/UserForm";
-import Pharmacy from "layouts/Pharmacy";
 import Graphs from "layouts/Graphs";
 import Products from "layouts/Products";
+import Offers from "layouts/Offers";
 import Calendar from "layouts/Calendar";
 import Profile from "layouts/profile";
 
@@ -77,6 +76,14 @@ const routes = [
   },
   {
     type: "collapse",
+    name: "Offers",
+    key: "offers",
+    icon: <Icon fontSize="small">local_offer</Icon>,
+    route: "/offers",
+    component: <Offers />,
+  },
+  {
+    type: "collapse",
     name: "Calendar",
     key: "calendar",
     icon: <Icon fontSize="small">calendar_today</Icon>,
@@ -93,27 +100,11 @@ const routes = [
   },
   {
     type: "collapse",
-    name: "Insurances",
-    key: "insurances",
-    icon: <Icon fontSize="small">table_view</Icon>,
-    route: "/insurances",
-    component: <Insurances />,
-  },
-  {
-    type: "collapse",
     name: "Add User",
     key: "addUser",
     icon: <Icon fontSize="small">person_add</Icon>,
     route: "/addUser",
     component: <AddUser />,
-  },
-  {
-    type: "collapse",
-    name: "Pharmacy",
-    key: "pharmacy",
-    icon: <Icon fontSize="small">local_pharmacy</Icon>,
-    route: "/pharmacy",
-    component: <Pharmacy />,
   },
   {
     type: "collapse",
