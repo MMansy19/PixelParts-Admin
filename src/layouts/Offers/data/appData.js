@@ -29,9 +29,11 @@ export default function productsTableData() {
     offerPercentage: "",
     overallRating: "",
   });
+
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [selectedFile, setSelectedFile] = useState(null);
+  const [isOfferModalOpen, setIsOfferModalOpen] = useState(false);
   const [isFileModalOpen, setIsFileModalOpen] = useState(false);
   const [selectedId, setSelectedId] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);
@@ -101,6 +103,48 @@ export default function productsTableData() {
     }
   };
 
+  const handleAddOffer = async (newOffer) => {
+    try {
+      const token = Cookies.get("authToken");
+      if (!token) {
+        throw new Error("Unauthorized access");
+      }
+
+      if (newOffer.offerPercentage < 0 || newOffer.offerPercentage > 100) {
+        throw new Error("Invalid offer percentage");
+      }
+
+      if (new Date(newOffer.startDate) > new Date(newOffer.endDate)) {
+        throw new Error("Invalid date range");
+      }
+
+      const response = await Axios.post(
+        `https://pixelparts-dev-api.up.railway.app/api/v1/offer/addOffer/${selectedId}`,
+        newOffer,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+
+      console.log("Add offer response:", response.data);
+
+      setNotification({
+        open: true,
+        message: "Offer added successfully.",
+        severity: "success",
+      });
+    } catch (error) {
+      console.error("Error adding offer:", error.response || error.message);
+      setNotification({
+        open: true,
+        message: "Failed to add offer. Please try again.",
+        severity: "error",
+      });
+    } finally {
+      closeOfferModal();
+    }
+  };
+
   const handleEditClick = (product) => {
     setEditedProduct({
       productId: product.productid,
@@ -118,12 +162,19 @@ export default function productsTableData() {
     });
     setIsModalOpen(true);
   };
+  const handleOpenOfferModal = (productId) => {
+    setSelectedId(productId);
+    setIsOfferModalOpen(true);
+  };
 
   const closeFileModal = () => {
     setIsFileModalOpen(false);
     setSelectedFile(null);
   };
 
+  const closeOfferModal = () => {
+    setIsOfferModalOpen(false);
+  };
   const closeDeleteModal = () => {
     setIsDeleteModalOpen(false);
   };
@@ -152,14 +203,14 @@ export default function productsTableData() {
   };
 
   
-  const handleDeleteProduct = async (productId) => {
+  const handleDeleteProduct = async () => {
     try {
       const token = Cookies.get("authToken");
       if (!token) {
         throw new Error("Unauthorized access");
       }
       await Axios.delete(
-        `https://pixelparts-dev-api.up.railway.app/api/v1/product/deleteProduct/${productId}`,
+        `https://pixelparts-dev-api.up.railway.app/api/v1/product/deleteProduct/${selectedId}`,
         {
           headers: { Authorization: `Bearer ${token}` },
         }
@@ -299,6 +350,13 @@ export default function productsTableData() {
               >
                 Edit Image
               </Button>
+              <Button
+                variant="text"
+                color="secondary"
+                onClick={() => handleOpenOfferModal(product.productid)}
+              >
+                Add Offer
+              </Button>
               <IconButton aria-label="delete" size="small"
                 onClick={() => openDeleteModal(product.productid)}   
               >
@@ -314,16 +372,16 @@ export default function productsTableData() {
     columns: [
       { Header: "Product ID", accessor: "productId", width: "10%", align: "center" },
       { Header: "product Image", accessor: "productimg", width: "10%", align: "center" },
-      { Header: "Product Name", accessor: "productName", width: "20%", align: "center" },
+      { Header: "Product Name", accessor: "productName", width: "15%", align: "center" },
       { Header: "Category", accessor: "category", width: "15%", align: "center" },
       { Header: "Manufacture", accessor: "manufacture", width: "15%", align: "center" },
-      { Header: "Price", accessor: "price", width: "10%", align: "center" },
-      { Header: "Stock Quantity", accessor: "stockQuantity", width: "10%", align: "center" },
-      { Header: "Release Date", accessor: "releaseDate", width: "15%", align: "center" },
-      { Header: "Warranty Period", accessor: "warrantyPeriod", width: "15%", align: "center" },
-      { Header: "Offer Percentage", accessor: "offerPercentage", width: "10%", align: "center" },
-      { Header: "Overall Rating", accessor: "overallRating", width: "10%", align: "center" },
-      { Header: "Action", accessor: "action", width: "10%", align: "center" },
+      { Header: "Price", accessor: "price", width: "5%", align: "center" },
+      { Header: "Stock Quantity", accessor: "stockQuantity", width: "5%", align: "center" },
+      { Header: "Release Date", accessor: "releaseDate", width: "10%", align: "center" },
+      { Header: "Warranty Period", accessor: "warrantyPeriod", width: "5%", align: "center" },
+      { Header: "Offer Percentage", accessor: "offerPercentage", width: "5%", align: "center" },
+      { Header: "Overall Rating", accessor: "overallRating", width: "5%", align: "center" },
+      { Header: "Action", accessor: "action", width: "15%", align: "center" },
     ],
     rows,
     editedProduct,
@@ -342,6 +400,9 @@ export default function productsTableData() {
     handleDeleteProduct,
     isDeleteModalOpen,
     closeDeleteModal,
-    selectedId,
+    isOfferModalOpen,
+    handleAddOffer,
+    closeOfferModal,
   };
+
 }

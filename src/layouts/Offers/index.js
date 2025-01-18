@@ -46,6 +46,11 @@ function Tables() {
     warrantyPeriod: 0,
     productImg: "",
   });
+  const [newOffer, setNewOffer] = useState({
+    offerPercentage: 0,
+    startDate: String(new Date()),
+    endDate: String(new Date()),
+  });
 
   const {
     columns,
@@ -66,7 +71,9 @@ function Tables() {
     handleUploadImage,
     imagePreview,
     handleDeleteProduct,
-    selectedId,
+    isOfferModalOpen,
+    handleAddOffer,
+    closeOfferModal,
   } = appData();
   const handleAddProductClick = () => {
     setIsProductModalOpen(true); // Open modal for adding new product
@@ -577,7 +584,54 @@ function Tables() {
           </Button>
         </DialogActions>
       </Dialog>
-
+      {/* Offer Modal */}
+      <Dialog
+        open={isOfferModalOpen}
+        onClose={closeOfferModal}
+        TransitionComponent={Fade}
+        TransitionProps={{ timeout: 500 }}
+        fullWidth
+        maxWidth="sm"
+        >
+          <DialogTitle>Add Offer</DialogTitle>
+          <DialogContent>
+            <TextField
+              name="offerPercentage"
+              label="Offer Percentage"
+              value={newOffer.offerPercentage}
+              onChange={(e) => setNewOffer({ ...newOffer, offerPercentage: e.target.value })}
+              type="number"
+              fullWidth
+              margin="dense"
+            />
+            <TextField
+              name="startDate"
+              label="Start Date"
+              value={newOffer.startDate}
+              onChange={(e) => setNewOffer({ ...newOffer, startDate: e.target.value })}
+              type="date"
+              fullWidth
+              margin="dense"
+            />
+            <TextField
+              name="endDate"
+              label="End Date"
+              value={newOffer.endDate}
+              onChange={(e) => setNewOffer({ ...newOffer, endDate: e.target.value })}
+              type="date"
+              fullWidth
+              margin="dense"
+            />
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={closeOfferModal} color="secondary">
+              Cancel
+            </Button>
+            <Button onClick={() => handleAddOffer(newOffer)} color="primary">
+              Save
+            </Button>
+          </DialogActions>
+        </Dialog>
       {/* File Modal */}
       <Dialog
         open={isFileModalOpen}
@@ -645,7 +699,7 @@ function Tables() {
           <Button onClick={closeDeleteModal} color="secondary">
             Cancel
           </Button>
-          <Button onClick={() => handleDeleteProduct(selectedId)} color="primary">
+          <Button onClick={handleDeleteProduct} color="primary">
             Confirm
           </Button>
         </DialogActions>
