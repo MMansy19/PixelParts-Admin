@@ -217,7 +217,7 @@ function ChartsDashboard() {
                   coloredShadow="info"
                 >
                   <MDTypography variant="h6" color="white">
-                    Appointments Count
+                    Products Count
                   </MDTypography>
                 </MDBox>
                 <MDBox p={3} width="100%" align="center">

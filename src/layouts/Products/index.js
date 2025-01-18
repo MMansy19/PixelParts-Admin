@@ -24,9 +24,10 @@ import Axios from "axios";
 import Cookies from "js-cookie";
 import axios from "axios";
 import { Box, FormControl, InputLabel } from "@mui/material";
+import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 
 // Data
-import appData from "layouts/Appointments/data/appData";
+import appData from "layouts/Products/data/appData";
 import { Typography } from "@mui/material";
 
 function Tables() {
@@ -225,7 +226,7 @@ function Tables() {
             <MDBox mb={1.5}>
               <ComplexStatisticsCard
                 icon="timer"
-                title="Scheduled Appointments"
+                title="Scheduled Products"
                 count={stats.scheduledappointments}
                 color="warning"
                 percentage={{
@@ -241,7 +242,7 @@ function Tables() {
               <ComplexStatisticsCard
                 color="success"
                 icon="done"
-                title="Completed Appointments"
+                title="Completed Products"
                 count={stats.completedappointments}
                 percentage={{
                   color: "success",
@@ -605,11 +606,10 @@ function Tables() {
                 }}
               />
             )}
-
-            {/* File Input */}
             <Button
-              // variant="outlined"
               component="label"
+              tabIndex={-1}
+              startIcon={<CloudUploadIcon />}
               fullWidth
             >
               Upload Product Image

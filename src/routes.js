@@ -43,7 +43,7 @@ import Insurances from "layouts/Insurances";
 import AddUser from "layouts/UserForm";
 import Pharmacy from "layouts/Pharmacy";
 import Graphs from "layouts/Graphs";
-import Appointments from "layouts/Appointments";
+import Products from "layouts/Products";
 import Calendar from "layouts/Calendar";
 import Profile from "layouts/profile";
 
@@ -73,7 +73,7 @@ const routes = [
     key: "products",
     icon: <Icon fontSize="small">shopping_cart</Icon>,
     route: "/products",
-    component: <Appointments />,
+    component: <Products />,
   },
   {
     type: "collapse",

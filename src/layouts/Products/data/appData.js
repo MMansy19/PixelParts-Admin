@@ -3,6 +3,8 @@ import MDAvatar from "components/MDAvatar";
 import Button from "@mui/material/Button";
 import Axios from "axios";
 import Cookies from "js-cookie";
+import IconButton from '@mui/material/IconButton';
+import DeleteIcon from '@mui/icons-material/Delete';
 
 export default function productsTableData() {
   const [products, setProducts] = useState([]);
@@ -230,14 +232,14 @@ export default function productsTableData() {
 
       setNotification({
         open: true,
-        message: "Appointment updated successfully.",
+        message: "Products updated successfully.",
         severity: "success",
       });
     } catch (error) {
-      console.error("Error updating appointment:", error);
+      console.error("Error updating products:", error);
       setNotification({
         open: true,
-        message: "Failed to update appointment. Please try again.",
+        message: "Failed to update products. Please try again.",
         severity: "error",
       });
     } finally {
@@ -297,13 +299,12 @@ export default function productsTableData() {
               >
                 Edit Image
               </Button>
-                <Button 
-                variant="text" 
-                color="error" 
+              <IconButton aria-label="delete" size="small"
                 onClick={() => openDeleteModal(product.productid)}   
               >
-                Delete
-              </Button>
+                <DeleteIcon fontSize="inherit" />
+              </IconButton>
+
             </div>
           ),
         }));

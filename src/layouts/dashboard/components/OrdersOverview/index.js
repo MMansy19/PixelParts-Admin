@@ -41,7 +41,7 @@ function OrdersOverview() {
     <Card sx={{ height: "100%" }}>
       <MDBox pt={3} px={3}>
         <MDTypography variant="h6" fontWeight="medium">
-          Appointments Overview
+          Products Overview
         </MDTypography>
         <MDBox mt={0} mb={2}>
           <MDTypography variant="button" color="text" fontWeight="regular">
@@ -74,7 +74,7 @@ function OrdersOverview() {
                   : "error"
               }
               icon="notifications"
-              title={`Appointment with Dr. ${appointment.doctorfirstname} ${appointment.doctorlastname} for ${appointment.patientfirstname} ${appointment.patientlastname}`}
+              title={`Products with Dr. ${appointment.doctorfirstname} ${appointment.doctorlastname} for ${appointment.patientfirstname} ${appointment.patientlastname}`}
               dateTime={new Date(appointment.appointmentdate).toLocaleString()}
             />
           ))}

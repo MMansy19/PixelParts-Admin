@@ -116,7 +116,7 @@ function Dashboard() {
             <MDBox mb={1.5}>
               <ComplexStatisticsCard
                 icon="event"
-                title="Appointments"
+                title="Products"
                 count={appointmentsnumber}
                 percentage={{
                   color: "success",
@@ -161,7 +161,7 @@ function Dashboard() {
               <MDBox mb={3}>
                 <ReportsLineChart
                   color="success"
-                  title="Monthly Appointments"
+                  title="Monthly Products"
                   description={
                     <>
                       (<strong>+15%</strong>) increase in today sales.
@@ -192,7 +192,7 @@ function Dashboard() {
                 <ComplexStatisticsCard
                   color="dark"
                   icon="paid"
-                  title="Appointments Total Profit"
+                  title="Products Total Profit"
                   count={`${appointmentsMoney} $`}
                   percentage={{
                     color: "success",
