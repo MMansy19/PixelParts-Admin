@@ -25,7 +25,6 @@ export default function productsTableData() {
     manufacture: "",
     price: "",
     stockQuantity: "",
-    specifications: "",
     releaseDate: "",
     warrantyPeriod: "",
     productImg: "",
@@ -33,7 +32,6 @@ export default function productsTableData() {
     offerPercentage: "",
     overallRating: "",
   });
-
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [selectedFile, setSelectedFile] = useState(null);
@@ -157,14 +155,12 @@ export default function productsTableData() {
       manufacture: product.manufacture,
       price: product.price,
       stockQuantity: product.stockquantity,
-      specifications: product.specifications,
       releaseDate: product.releasedate,
       warrantyPeriod: product.warrantyperiod,
-      offerPercentage: product.offerpercentage,
       overallRating: product.overallrating,
       description: product.description,
     });
-    setIsModalOpen(true);
+    editedProduct && setIsModalOpen(true);
   };
   const handleOpenOfferModal = (productId) => {
     setSelectedId(productId);
@@ -192,7 +188,6 @@ export default function productsTableData() {
       manufacture: "",
       price: "",
       stockQuantity: "",
-      specifications: "",
       releaseDate: "",
       warrantyPeriod: "",
       productImg: "",

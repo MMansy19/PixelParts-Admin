@@ -42,7 +42,6 @@ import SignIn from "layouts/authentication/sign-in";
 import AddUser from "layouts/UserForm";
 import Graphs from "layouts/Graphs";
 import Products from "layouts/Products";
-import Offers from "layouts/Offers";
 import Calendar from "layouts/Calendar";
 import Profile from "layouts/profile";
 
@@ -73,14 +72,6 @@ const routes = [
     icon: <Icon fontSize="small">shopping_cart</Icon>,
     route: "/products",
     component: <Products />,
-  },
-  {
-    type: "collapse",
-    name: "Offers",
-    key: "offers",
-    icon: <Icon fontSize="small">local_offer</Icon>,
-    route: "/offers",
-    component: <Offers />,
   },
   {
     type: "collapse",

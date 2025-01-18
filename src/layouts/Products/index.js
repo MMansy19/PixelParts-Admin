@@ -31,10 +31,10 @@ import appData from "layouts/Products/data/appData";
 import { Typography } from "@mui/material";
 
 function Tables() {
+  let isEditedProduct = false;
   const [stats, setStats] = useState({});
   const [loading, setLoading] = useState(false);
   const [isProductModalOpen, setIsProductModalOpen] = useState(false);
-
   const [newProduct, setNewProduct] = useState({
     category: "",
     productName: "",
@@ -424,7 +424,7 @@ function Tables() {
             <Button
               variant="outlined"
               color="primary"
-              onClick={handleAddSpecification}
+              onClick={() => handleAddSpecification(isEditedProduct = false)}
               style={{ marginTop: "10px", color: "green" }}
             >
               Add Specification
@@ -514,16 +514,6 @@ function Tables() {
                 margin="dense"
               />
               <TextField
-                name="specifications"
-                label="Specifications"
-                value={editedProduct.specifications}
-                onChange={handleInputChange}
-                fullWidth
-                margin="dense"
-                multiline
-                rows={3}
-              />
-              <TextField
                 name="releaseDate"
                 label="Release Date"
                 type="date"
@@ -540,15 +530,6 @@ function Tables() {
                 label="Warranty Period (Months)"
                 type="number"
                 value={editedProduct.warrantyPeriod}
-                onChange={handleInputChange}
-                fullWidth
-                margin="dense"
-              />
-              <TextField
-                name="offerPercentage"
-                label="Offer Percentage"
-                type="number"
-                value={editedProduct.offerPercentage}
                 onChange={handleInputChange}
                 fullWidth
                 margin="dense"
