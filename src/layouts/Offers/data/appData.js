@@ -18,6 +18,7 @@ export default function productsTableData() {
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [isOfferModalOpen, setIsOfferModalOpen] = useState(false);
   const [selectedId, setSelectedId] = useState(null);
+  const [oldOffer, setOldOffer] = useState(null);
 
   const openDeleteModal = (productId) => {
     setSelectedId(productId);
@@ -74,6 +75,8 @@ export default function productsTableData() {
   };
 
   const handleOpenOfferModal = (productId) => {
+    // get old offer by product id 
+    setOldOffer(products.find((product) => product.productid === productId).offerpercentage);  
     setSelectedId(productId);
     setIsOfferModalOpen(true);
   };
@@ -215,6 +218,8 @@ const rows = useMemo(() => {
       { Header: "Actions", accessor: "action",  align: "center" },
     ],
     rows,
+    products,
+    oldOffer,
     handleCloseModal,
     isModalOpen,
     notification,

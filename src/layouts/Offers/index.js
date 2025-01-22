@@ -1,7 +1,6 @@
 import React from "react";
 import Grid from "@mui/material/Grid";
 import Card from "@mui/material/Card";
-import ReportsLineChart from "examples/Charts/LineCharts/ReportsLineChart";
 import ComplexStatisticsCard from "examples/Cards/StatisticsCards/ComplexStatisticsCard";
 import MDBox from "components/MDBox";
 import MDTypography from "components/MDTypography";
@@ -15,50 +14,24 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogActions from "@mui/material/DialogActions";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
-import Select from "@mui/material/Select";
-import MenuItem from "@mui/material/MenuItem";
 import Fade from "@mui/material/Fade";
 import MDSnackbar from "components/MDSnackbar";
 import { useState, useEffect } from "react";
 import Axios from "axios";
 import Cookies from "js-cookie";
-import axios from "axios";
-import { Box, FormControl, InputLabel } from "@mui/material";
-import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 
 // Data
 import appData from "layouts/Offers/data/appData";
-import { Typography } from "@mui/material";
 
 function Tables() {
-  let isEditedProduct = false;
   const [stats, setStats] = useState({});
   const [loading, setLoading] = useState(false);
-  const [isProductModalOpen, setIsProductModalOpen] = useState(false);
-  const [newProduct, setNewProduct] = useState({
-    category: "",
-    productName: "",
-    manufacture: "",
-    price: 0,
-    stockQuantity: 0,
-    specifications: [],
-    releaseDate: "",
-    warrantyPeriod: 0,
-    productImg: "",
-  });
-  const [newOffer, setNewOffer] = useState({
-    offerPercentage: 0,
-    startDate: String(new Date()),
-    endDate: String(new Date()),
-  });
 
   const {
     columns,
     rows,
-    handleCloseModal,
-    isModalOpen,
+    oldOffer,
     notification,
-    setNotification,
     handleCloseNotification,
     handleDeleteOffer,
     isDeleteModalOpen,
@@ -67,7 +40,12 @@ function Tables() {
     handleEditOffer,
     closeOfferModal,
   } = appData();
-
+  
+    const [newOffer, setNewOffer] = useState({
+      offerPercentage: oldOffer,
+      startDate: String(new Date()),
+      endDate: String(new Date()),
+    });
   const fetchAppointmentsStats = async () => {
     try {
       setLoading(true);
@@ -99,7 +77,7 @@ function Tables() {
               <ComplexStatisticsCard
                 color="dark"
                 icon="people"
-                title="Total Products"
+                title="Total Offers"
                 count={
                   loading
                     ? "Loading..."
@@ -119,7 +97,7 @@ function Tables() {
             <MDBox mb={1.5}>
               <ComplexStatisticsCard
                 icon="timer"
-                title="Scheduled Products"
+                title="Scheduled Offers"
                 count={stats.scheduledappointments}
                 color="warning"
                 percentage={{
@@ -135,7 +113,7 @@ function Tables() {
               <ComplexStatisticsCard
                 color="success"
                 icon="done"
-                title="Completed Products"
+                title="Completed Offers"
                 count={stats.completedappointments}
                 percentage={{
                   color: "success",
@@ -150,7 +128,7 @@ function Tables() {
               <ComplexStatisticsCard
                 color="error"
                 icon="block"
-                title="Canceled Doctors"
+                title="Canceled Offers"
                 count={stats.cancelledappointments}
                 percentage={{
                   color: "success",
@@ -210,6 +188,7 @@ function Tables() {
             <TextField
               name="offerPercentage"
               label="Offer Percentage"
+              defaultValue={oldOffer}
               value={newOffer.offerPercentage}
               onChange={(e) => setNewOffer({ ...newOffer, offerPercentage: e.target.value })}
               type="number"
