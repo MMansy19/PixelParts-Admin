@@ -38,6 +38,7 @@ Coded by www.creative-tim.com
 // Material Dashboard 2 React layouts
 import Dashboard from "layouts/dashboard";
 import Tables from "layouts/tables";
+import Contact from "layouts/contact";
 import SignIn from "layouts/authentication/sign-in";
 import AddUser from "layouts/UserForm";
 import Graphs from "layouts/Graphs";
@@ -81,6 +82,14 @@ const routes = [
     icon: <Icon fontSize="small">local_offer</Icon>,
     route: "/offers",
     component: <Offers />,
+  },
+  {
+    type: "collapse",
+    name: "Contact",
+    key: "contact",
+    icon: <Icon fontSize="small">contact_mail</Icon>,
+    route: "/contact",
+    component: <Contact />,
   },
   {
     type: "collapse",
