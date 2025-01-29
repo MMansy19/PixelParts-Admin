@@ -16,7 +16,6 @@ export default function contactTableData() {
   const navigate = useNavigate();
   const [messages, setMessages] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [selectedMessage, setSelectedMessage] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editedMessage, setEditedMessage] = useState(null);
 
@@ -65,29 +64,20 @@ export default function contactTableData() {
     fetchMessages();
   }, []);
 
-  const handleEditClick = (user) => {
-    setSelectedMessage(user);
-    setEditedMessage({
-    userid: user.userid,
-    firstname: user.firstname,
-    lastname: user.lastname,
-    email: user.email,
-    phonenumber: user.phonenumber,
-    birthdate: user.birthdate,
-    userState: user.userState,
-  });
+  const handleEditClick = (message) => {
+    console.log("Editing message:", message);
+    setEditedMessage({message});
     setIsModalOpen(true);
   };
 
   const handleCloseModal = () => {
     setIsModalOpen(false);
-    setSelectedMessage(null);
     setEditedMessage(null);
   };
 
   const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setEditedMessage({ ...editedMessage, [name]: value });
+    const { value } = e.target;
+    setEditedMessage((prev) => ({ ...prev, answer: value }));
   };
 
   const handleSaveChanges = async () => {
@@ -98,15 +88,7 @@ export default function contactTableData() {
         throw new Error("No authorization token found. Please log in again.");
       }
 
-      // Determine changed fields by comparing `editedUser` with `selectedUser`
-      const updatedFields = Object.keys(editedMessage).reduce((changes, key) => {
-        if (editedMessage[key] !== selectedMessage[key]) {
-          changes[key] = editedMessage[key];
-        }
-        return changes;
-      }, {});
-
-      if (Object.keys(updatedFields).length === 0) {
+      if (!editedMessage) {
         setNotification({
           open: true,
           message: "No changes detected.",
@@ -115,11 +97,11 @@ export default function contactTableData() {
         return;
       }
 
-      console.log("Updated fields:", updatedFields);
+      console.log("Updated fields:", editedMessage);
       // Make the API call with only updated fields
       const response = await Axios.patch(
-        `https://pixelparts-dev-api.up.railway.app/api/v1/user/updateUser/${editedMessage.userid}`,
-        updatedFields,
+        `https://pixelparts-dev-api.up.railway.app/api/v1/message/answerMessage/${editedMessage.messageid}`,
+        editedMessage.answer,
         {
           headers: {
             Authorization: `Bearer ${token}`, // Include the token
@@ -132,23 +114,18 @@ export default function contactTableData() {
       setIsModalOpen(false);
       setNotification({
         open: true,
-        message: "user updated successfully!",
+        message: "message updated successfully.",
         severity: "success",
       });
     } catch (error) {
-      if (error.response && error.response.status === 401) {
-        console.error("Unauthorized access - redirecting to login.");
-        navigate("/authentication/sign-in");
-      } else {
-        console.error("Failed to update user:", error);
-        setNotification({
-          open: true,
-          message: error.response?.data?.message || "Failed to update user. Please try again.",
-          severity: "error",
-        });
-      }
+      console.error("Error updating message:", error);
+      setNotification({
+        open: true,
+        message: "Failed to update message. Please try again.",
+        severity: "error",
+      });
     }
-  };
+  }
 
   const Author = ({ image, name, email }) => (
     <MDBox display="flex" alignItems="center" lineHeight={1}>
@@ -234,7 +211,7 @@ const rows = useMemo(() => {
     handleCloseModal,
     handleInputChange,
     handleSaveChanges,
-    editedUser: editedMessage,
+    editedMessage,
 
     // Notification snackbar
     notification,

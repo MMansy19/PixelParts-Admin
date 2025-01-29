@@ -21,6 +21,7 @@ import { useState } from "react";
 
 // Data
 import contactTableData from "layouts/contact/data/contactTableData";
+import { TextField } from "@mui/material";
 
 function Tables() {
   const [currentPage, setCurrentPage] = useState(0);
@@ -31,7 +32,7 @@ function Tables() {
     handleCloseModal,
     handleInputChange,
     handleSaveChanges,
-    editedUser,
+    editedMessage,
     notification,
     handleCloseNotification,
   } = contactTableData();
@@ -81,59 +82,22 @@ function Tables() {
   onClose={handleCloseModal}
   TransitionComponent={Fade}
   TransitionProps={{ timeout: 500 }}
+  fullWidth
+  maxWidth="sm"
 >
-  <DialogTitle>Update User State</DialogTitle>
+  <DialogTitle>Answer to message</DialogTitle>
   <DialogContent>
-    {editedUser && (
-      <>
-        {/* <TextField
-          name="firstname"
-          label="First Name"
-          value={editedUser.firstname || ""}
-          onChange={handleInputChange}
-          fullWidth
-          margin="dense"
-        />
-        <TextField
-          name="lastname"
-          label="Last Name"
-          value={editedUser.lastname || ""}
-          onChange={handleInputChange}
-          fullWidth
-          margin="dense"
-        />
-        <TextField
-          name="email"
-          label="Email"
-          value={editedUser.email || ""}
-          onChange={handleInputChange}
-          fullWidth
-          margin="dense"
-        />
-        <TextField
-          name="phonenumber"
-          label="Phone Number"
-          value={editedUser.phonenumber || ""}
-          onChange={handleInputChange}
-          fullWidth
-          margin="dense"
-        /> */}
-        <Select
-          name="userState"
-          label="User State"
-          value={editedUser.userState || ""}
-          onChange={handleInputChange}
-          fullWidth
-          margin="dense"
-          style={{ marginTop: "1px", padding: "11px" }}
-        >
-          <MenuItem value="Active">Active</MenuItem>
-          <MenuItem value="Pending">Pending</MenuItem>
-          <MenuItem value="Blocked">Blocked</MenuItem>
-        </Select>
-      </>
+    {editedMessage && (
+      <TextField
+      name="message"
+      value={editedMessage.message || ""}
+      onChange={handleInputChange}
+      fullWidth
+      multiline
+      rows={3}
+    />
     )}
-  </DialogContent>
+  </DialogContent>  
   <DialogActions>
     <Button onClick={handleCloseModal} color="secondary">
       Cancel
