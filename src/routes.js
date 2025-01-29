@@ -39,6 +39,7 @@ Coded by www.creative-tim.com
 import Dashboard from "layouts/dashboard";
 import Tables from "layouts/tables";
 import Contact from "layouts/contact";
+import Orders from "layouts/orders";
 import SignIn from "layouts/authentication/sign-in";
 import AddUser from "layouts/UserForm";
 import Graphs from "layouts/Graphs";
@@ -74,6 +75,14 @@ const routes = [
     icon: <Icon fontSize="small">shopping_cart</Icon>,
     route: "/products",
     component: <Products />,
+  },
+  {
+    type: "collapse",
+    name: "Orders",
+    key: "orders",
+    icon: <Icon fontSize="small">attach_money</Icon>,
+    route: "/orders",
+    component: <Orders />,
   },
   {
     type: "collapse",
