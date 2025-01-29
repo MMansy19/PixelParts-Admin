@@ -101,7 +101,7 @@ export default function contactTableData() {
       // Make the API call with only updated fields
       const response = await Axios.patch(
         `https://pixelparts-dev-api.up.railway.app/api/v1/message/answerMessage/${editedMessage.messageid}`,
-        editedMessage.answer,
+        { answer: editedMessage.answer },
         {
           headers: {
             Authorization: `Bearer ${token}`, // Include the token
