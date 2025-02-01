@@ -44,20 +44,9 @@ export default function appData() {
             `https://pixelparts-dev-api.up.railway.app/api/v1/product/getProduct/${productId}`
           );
           const productData = productResponse.data.data.product;
-          return {
-            productId,
-            name: productData.productName,
-            price: productData.price,
-            image: productData.productImg, // Ensure this is the correct field for image URL
-          };
+          return productData;
         } catch (error) {
           console.error(`Error fetching product ${productId}:`, error);
-          return {
-            productId,
-            name: "Unknown Product",
-            price: "N/A",
-            image: "",
-          };
         }
       })
     );

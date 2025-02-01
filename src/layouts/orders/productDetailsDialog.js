@@ -7,11 +7,6 @@ import {
   DialogActions,
   Button,
   IconButton,
-  Table,
-  TableHead,
-  TableRow,
-  TableCell,
-  TableBody,
   CircularProgress,
 } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
@@ -32,6 +27,7 @@ const ProductDetailsDialog = ({ isOpen, handleClose, fetchProducts }) => {
         setLoading(true);
         const productsWithDetails = await fetchProducts();
         setProducts(productsWithDetails);
+        console.log(productsWithDetails);   
         setLoading(false);
       }
     };
@@ -41,11 +37,14 @@ const ProductDetailsDialog = ({ isOpen, handleClose, fetchProducts }) => {
 
 
 const rows = useMemo(() => {
+  const flattenedProducts = products.flat(); // Flatten the nested arrays
+
   return loading
     ? [
         {
           productId: "Loading...",
           productName: "Loading...",
+          productDescription: "Loading...",
           category: "Loading...",
           manufacture: "Loading...",
           price: "Loading...",
@@ -54,15 +53,21 @@ const rows = useMemo(() => {
           warrantyPeriod: "Loading...",
           offerPercentage: "Loading...",
           overallRating: "Loading...",
-          action: "Loading...",
         },
       ]
-    : products.map((product) => ({
+    : flattenedProducts.map((product) => ({
         productId: product.productid,
         productName: (
           <div className="max-w-[100px] truncate">
             <p className="font-semibold" title={product.productname}>
               {product.productname}
+            </p>
+          </div>
+        ),
+        productDescription: (
+          <div className="max-w-[100px] truncate">
+            <p className="font-semibold" title={product.description}>
+              {product.description}
             </p>
           </div>
         ),
@@ -85,45 +90,13 @@ const rows = useMemo(() => {
           ? `${product.offerpercentage}%`
           : "No Offers",
         overallRating: parseFloat(product.overallrating).toFixed(2),
-        action: (
-          <div className="flex justify-center space-x-2">
-            <IconButton
-              color="primary"
-              size="medium"
-              onClick={() => handleEditClick(product)}
-            >
-              <EditIcon fontSize="medium" />
-            </IconButton>
-            <IconButton
-              color="secondary"
-              size="medium"
-              onClick={() => handleOpenFileModal(product.productid)}
-            >
-              <AddPhotoAlternateIcon fontSize="medium"  />
-            </IconButton>
-            <IconButton
-              color="default"
-              size="medium"
-              onClick={() => handleOpenOfferModal(product.productid)}
-            >
-              <LocalOfferIcon fontSize="medium" />
-            </IconButton>
-            <IconButton
-              color="error"
-              size="medium"
-              onClick={() => openDeleteModal(product.productid)}
-            >
-              <DeleteIcon fontSize="medium" />
-            </IconButton>
-          </div>
-        ),
       }));
 }, [loading, products]);
 
   const columns = [{ Header: "ID", accessor: "productId",  align: "center" },
       { Header: "product Image", accessor: "productimg",  align: "center" },
       { Header: "Product Name", accessor: "productName",   align: "center" },
-      // { Header: "Description", accessor: "productDescription",  align: "center" },
+      { Header: "Description", accessor: "productDescription",  align: "center" },
       { Header: "Category", accessor: "category",  align: "center" },
       { Header: "Manufacture", accessor: "manufacture",  align: "center" },
       { Header: "Price", accessor: "price",  align: "center" },
@@ -132,12 +105,11 @@ const rows = useMemo(() => {
       { Header: "Warranty Period", accessor: "warrantyPeriod",  align: "center" },
       { Header: "Offer Percentage", accessor: "offerPercentage",  align: "center" },
       { Header: "Overall Rating", accessor: "overallRating",  align: "center" },
-      { Header: "Actions", accessor: "action",  align: "center" },
     ];
 
   return (
-    <Dialog open={isOpen} onClose={handleClose} maxWidth="lg" fullWidth>
-      <DialogTitle>Product Details</DialogTitle>
+    <Dialog open={isOpen} onClose={handleClose} maxWidth="xl" fullWidth>
+      <DialogTitle>Products</DialogTitle>
       <DialogContent>
         {loading ? (
           <div className="flex justify-center py-4">
