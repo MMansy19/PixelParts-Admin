@@ -44,7 +44,7 @@ function OrdersDashboard() {
             { title: "Total Orders", count: stats.completedappointments + stats.scheduledappointments + stats.cancelledappointments, color: "dark", icon: "people" },
             { title: "Scheduled Orders", count: stats.scheduledappointments, color: "warning", icon: "timer" },
             { title: "Completed Orders", count: stats.completedappointments, color: "success", icon: "done" },
-            { title: "Canceled Doctors", count: stats.cancelledappointments, color: "error", icon: "block" },
+            { title: "Canceled Orders", count: stats.cancelledappointments, color: "error", icon: "block" },
           ].map(({ title, count, color, icon }) => (
             <Grid item xs={12} md={6} lg={3} key={title}>
               <MDBox mb={1.5}>

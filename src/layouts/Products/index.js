@@ -264,7 +264,7 @@ function Tables() {
               <ComplexStatisticsCard
                 color="error"
                 icon="block"
-                title="Canceled Doctors"
+                title="Canceled Products"
                 count={stats.cancelledappointments}
                 percentage={{
                   color: "success",
