@@ -32,7 +32,6 @@ import { Typography } from "@mui/material";
 
 function Tables() {
   let isEditedProduct = false;
-  const [stats, setStats] = useState({});
   const [loading, setLoading] = useState(false);
   const [isProductModalOpen, setIsProductModalOpen] = useState(false);
   const [newProduct, setNewProduct] = useState({
@@ -182,99 +181,11 @@ function Tables() {
     }
   };
 
-  const fetchAppointmentsStats = async () => {
-    try {
-      setLoading(true);
-      const response = await Axios.get(
-        // TO DO
-        "https://mediportal-api-production.up.railway.app/api/v1/appointments/stats",
-        {
-          headers: { Authorization: `Bearer ${Cookies.get("authToken")}` },
-        }
-      );
-      setLoading(false);
-      setStats(response.data.data.stats);
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
-  useEffect(() => {
-    fetchAppointmentsStats();
-  }, []);
-
   return (
     <DashboardLayout>
       <DashboardNavbar />
       <MDBox pt={6} pb={3}>
-        <Grid container spacing={3} marginBottom={5}>
-          <Grid item xs={12} md={6} lg={3}>
-            <MDBox mb={1.5}>
-              <ComplexStatisticsCard
-                color="dark"
-                icon="people"
-                title="Total Products"
-                count={
-                  loading
-                    ? "Loading..."
-                    : Number(stats.completedappointments) +
-                      Number(stats.scheduledappointments) +
-                      Number(stats.cancelledappointments)
-                }
-                percentage={{
-                  color: "success",
-                  amount: "",
-                  label: "Just updated",
-                }}
-              />
-            </MDBox>
-          </Grid>
-          <Grid item xs={12} md={6} lg={3}>
-            <MDBox mb={1.5}>
-              <ComplexStatisticsCard
-                icon="timer"
-                title="Scheduled Products"
-                count={stats.scheduledappointments}
-                color="warning"
-                percentage={{
-                  color: "success",
-                  amount: "",
-                  label: "Just updated",
-                }}
-              />
-            </MDBox>
-          </Grid>
-          <Grid item xs={12} md={6} lg={3}>
-            <MDBox mb={1.5}>
-              <ComplexStatisticsCard
-                color="success"
-                icon="done"
-                title="Completed Products"
-                count={stats.completedappointments}
-                percentage={{
-                  color: "success",
-                  amount: "",
-                  label: "Just updated",
-                }}
-              />
-            </MDBox>
-          </Grid>
-          <Grid item xs={12} md={6} lg={3}>
-            <MDBox mb={1.5}>
-              <ComplexStatisticsCard
-                color="error"
-                icon="block"
-                title="Canceled Products"
-                count={stats.cancelledappointments}
-                percentage={{
-                  color: "success",
-                  amount: "",
-                  label: "Just updated",
-                }}
-              />
-            </MDBox>
-          </Grid>
-        </Grid>
+
         <Grid container spacing={6}>
           <Grid item xs={12}>
             <Card>

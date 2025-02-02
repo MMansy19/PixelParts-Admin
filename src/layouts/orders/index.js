@@ -40,7 +40,7 @@ function OrdersDashboard() {
     const fetchAppointmentsStats = async () => {
       try {
         const { data } = await Axios.get(
-          "https://mediportal-api-production.up.railway.app/api/v1/appointments/stats",
+          "https://pixelparts-dev-api.up.railway.app/api/v1/stats/orderStats",
           { headers: { Authorization: `Bearer ${Cookies.get("authToken")}` } }
         );
         setStats(data.data.stats);
@@ -61,30 +61,27 @@ function OrdersDashboard() {
           {[
             {
               title: "Total Orders",
-              count:
-                stats.completedappointments +
-                stats.scheduledappointments +
-                stats.cancelledappointments,
-              color: "dark",
-              icon: "people",
+              count: stats.totalorders,
+              color: "info",
+              icon: "shopping_cart",
             },
             {
-              title: "Scheduled Orders",
-              count: stats.scheduledappointments,
-              color: "warning",
-              icon: "timer",
-            },
-            {
-              title: "Completed Orders",
-              count: stats.completedappointments,
+              title: "Paid Orders",
+              count: stats.paidorders,
               color: "success",
               icon: "done",
             },
             {
-              title: "Canceled Orders",
-              count: stats.cancelledappointments,
+              title: "Pending Orders",
+              count: stats.pendingorders,
+              color: "warning",
+              icon: "hourglass_empty",
+            },
+            {
+              title: "Cancelled Orders",
+              count: stats.cancelledorders,
               color: "error",
-              icon: "block",
+              icon: "cancel",
             },
           ].map(({ title, count, color, icon }) => (
             <Grid item xs={12} md={6} lg={3} key={title}>
