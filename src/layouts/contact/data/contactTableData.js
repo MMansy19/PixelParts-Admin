@@ -66,7 +66,7 @@ export default function contactTableData() {
 
   const handleEditClick = (message) => {
     console.log("Editing message:", message);
-    setEditedMessage({message});
+    setEditedMessage({ message });
     setIsModalOpen(true);
   };
 
@@ -125,7 +125,7 @@ export default function contactTableData() {
         severity: "error",
       });
     }
-  }
+  };
 
   const Author = ({ image, name, email }) => (
     <MDBox display="flex" alignItems="center" lineHeight={1}>
@@ -139,53 +139,52 @@ export default function contactTableData() {
     </MDBox>
   );
 
-const rows = useMemo(() => {
-  return loading
-    ? [
-        {
-          messageId: "Loading...",
-          userId: "Loading...",
+  const rows = useMemo(() => {
+    return loading
+      ? [
+          {
+            messageId: "Loading...",
+            userId: "Loading...",
+            // User: (
+            //   <MDBox display="flex" justifyContent="center" alignItems="center" width="100%">
+            //     <CircularProgress size={24} />
+            //   </MDBox>
+            // ),
+            message: "Loading...",
+            answer: "Loading...",
+            createdAt: "Loading...",
+            status: (
+              <MDBox ml={-1}>
+                <MDBadge badgeContent="loading" color="light" variant="gradient" size="sm" />
+              </MDBox>
+            ),
+            action: "Loading...",
+          },
+        ]
+      : messages
+      ? messages.map((message) => ({
+          key: message.messageid,
+          messageId: message.messageid,
+          userId: message.userid,
           // User: (
-          //   <MDBox display="flex" justifyContent="center" alignItems="center" width="100%">
-          //     <CircularProgress size={24} />
-          //   </MDBox>
+          //   <Author
+          //     image={user.userimg || `https://ui-avatars.com/api/?name=${user.firstname}+${user.lastname}`}
+          //     name={`${user.firstname} ${user.lastname}`}
+          //     username={user.username}
+          //     email={user.email}
+          //   />
           // ),
-          message: "Loading...",
-          answer: "Loading...",
-          createdAt: "Loading...",
-          status: (
-            <MDBox ml={-1}>
-              <MDBadge badgeContent="loading" color="light" variant="gradient" size="sm" />
-            </MDBox>
+          message: message.message,
+          answer: message.answer || "No Answer",
+          createdAt: new Date(message.createdat).toLocaleDateString(),
+          action: (
+            <Button variant="text" color="primary" onClick={() => handleEditClick(message)}>
+              Edit
+            </Button>
           ),
-          action: "Loading...",
-        },
-      ]
-    : messages
-    ? messages.map((message) => ({
-        key: message.messageid,
-        messageId: message.messageid,
-        userId: message.userid,
-        // User: (
-        //   <Author
-        //     image={user.userimg || `https://ui-avatars.com/api/?name=${user.firstname}+${user.lastname}`}
-        //     name={`${user.firstname} ${user.lastname}`}
-        //     username={user.username}
-        //     email={user.email}
-        //   />
-        // ),
-        message: message.message,
-        answer: message.answer || "No Answer",
-        createdAt: new Date(message.createdat).toLocaleDateString(),
-        action: (
-          <Button variant="text" color="primary" onClick={() => handleEditClick(message)}>
-            Edit
-          </Button>
-        ),
-      }))
-    : 'No users to display.';
-}, [loading, messages]);
-
+        }))
+      : "No users to display.";
+  }, [loading, messages]);
 
   Author.propTypes = {
     image: PropTypes.string.isRequired,
@@ -194,17 +193,16 @@ const rows = useMemo(() => {
   };
 
   return {
-    
-  columns : [
-    { Header: "Message ID", accessor: "messageId", align: "center" },
-    { Header: "User ID", accessor: "userId", align: "center" },
-    // { Header: "User", accessor: "User", width: "35%", align: "left" },
-  { Header: "Message", accessor: "message", align: "left" },
-  { Header: "Answer", accessor: "answer", align: "center" },
-  { Header: "Created At", accessor: "createdAt", align: "center" },
-  { Header: "Action", accessor: "action", align: "center" },
-  ],
-  rows: rows,
+    columns: [
+      { Header: "Message ID", accessor: "messageId", align: "center" },
+      { Header: "User ID", accessor: "userId", align: "center" },
+      // { Header: "User", accessor: "User", width: "35%", align: "left" },
+      { Header: "Message", accessor: "message", align: "left" },
+      { Header: "Answer", accessor: "answer", align: "center" },
+      { Header: "Created At", accessor: "createdAt", align: "center" },
+      { Header: "Action", accessor: "action", align: "center" },
+    ],
+    rows: rows,
 
     // Modal for editing user
     isModalOpen,
@@ -216,6 +214,5 @@ const rows = useMemo(() => {
     // Notification snackbar
     notification,
     handleCloseNotification,
-
   };
 }

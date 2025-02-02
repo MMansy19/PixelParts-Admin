@@ -8,7 +8,7 @@ export default function appData() {
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedProducts, setSelectedProducts] = useState([]);
-    const [notification, setNotification] = useState({
+  const [notification, setNotification] = useState({
     open: false,
     message: "",
     severity: "success", // "success" | "error"
@@ -52,7 +52,7 @@ export default function appData() {
     );
     return productsWithDetails;
   };
-  
+
   useEffect(() => {
     fetchOrders();
   }, []);
@@ -70,46 +70,43 @@ export default function appData() {
   const rows = useMemo(() => {
     return loading
       ? [
-        {
-        orderId: "Loading...",
-        userId: "Loading...",
-        username: "Loading...",
-        email: "Loading...",
-        totalPrice: "Loading...",
-        orderDate: "Loading...",
-        paymentMethod: "Loading...",
-        paymentStatus: "Loading...",
-        products: "Loading...",
-        actions: "Loading...",
-        },
-      ]
+          {
+            orderId: "Loading...",
+            userId: "Loading...",
+            username: "Loading...",
+            email: "Loading...",
+            totalPrice: "Loading...",
+            orderDate: "Loading...",
+            paymentMethod: "Loading...",
+            paymentStatus: "Loading...",
+            products: "Loading...",
+            actions: "Loading...",
+          },
+        ]
       : orders.map((order) => ({
-        orderId: order.orderid,
-        userId: order.userid,
-        username: order.username,
-        email: order.email,
-        totalPrice: `$${order.totalprice}`,
-        orderDate: new Date(order.orderdate).toLocaleDateString(),
-        paymentMethod: order.paymentmethod,
-        paymentStatus: order.paymentstatus,
-        products: (
-        <ul>
-          {order.products.map((product) => (
-          <li key={product.productId}>
-            {product.name} (ID: {product.productId}, Qty: {product.quantity})
-          </li>
-          ))}
-        </ul>
-        ),
-        actions: (
-        <IconButton
-          color="secondary"
-          onClick={() => handleViewProducts(order.products)}
-        >
-          <VisibilityIcon />
-        </IconButton>
-        ),
-      }));
+          orderId: order.orderid,
+          userId: order.userid,
+          username: order.username,
+          email: order.email,
+          totalPrice: `$${order.totalprice}`,
+          orderDate: new Date(order.orderdate).toLocaleDateString(),
+          paymentMethod: order.paymentmethod,
+          paymentStatus: order.paymentstatus,
+          products: (
+            <ul>
+              {order.products.map((product) => (
+                <li key={product.productId}>
+                  {product.name} (ID: {product.productId}, Qty: {product.quantity})
+                </li>
+              ))}
+            </ul>
+          ),
+          actions: (
+            <IconButton color="secondary" onClick={() => handleViewProducts(order.products)}>
+              <VisibilityIcon />
+            </IconButton>
+          ),
+        }));
   }, [loading, orders]);
 
   return {

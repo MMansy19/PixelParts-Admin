@@ -75,14 +75,14 @@ export default function usersTableData() {
   const handleEditClick = (user) => {
     setSelectedUser(user);
     setEditedUser({
-    userid: user.userid,
-    firstname: user.firstname,
-    lastname: user.lastname,
-    email: user.email,
-    phonenumber: user.phonenumber,
-    birthdate: user.birthdate,
-    userState: user.userState,
-  });
+      userid: user.userid,
+      firstname: user.firstname,
+      lastname: user.lastname,
+      email: user.email,
+      phonenumber: user.phonenumber,
+      birthdate: user.birthdate,
+      userState: user.userState,
+    });
     setIsModalOpen(true);
   };
 
@@ -169,67 +169,69 @@ export default function usersTableData() {
     </MDBox>
   );
 
-const rows = useMemo(() => {
-  return loading
-    ? [
-        {
-          userId: "Loading...",
+  const rows = useMemo(() => {
+    return loading
+      ? [
+          {
+            userId: "Loading...",
+            User: (
+              <MDBox display="flex" justifyContent="center" alignItems="center" width="100%">
+                <CircularProgress size={24} />
+              </MDBox>
+            ),
+            phoneNumber: "Loading...",
+            email: "Loading...",
+            birthdate: "Loading...",
+            createdAt: "Loading...",
+            status: (
+              <MDBox ml={-1}>
+                <MDBadge badgeContent="loading" color="light" variant="gradient" size="sm" />
+              </MDBox>
+            ),
+            action: "Loading...",
+          },
+        ]
+      : users
+      ? users.map((user) => ({
+          key: user.userid,
+          userId: user.userid,
           User: (
-            <MDBox display="flex" justifyContent="center" alignItems="center" width="100%">
-              <CircularProgress size={24} />
-            </MDBox>
+            <Author
+              image={
+                user.userimg ||
+                `https://ui-avatars.com/api/?name=${user.firstname}+${user.lastname}`
+              }
+              name={`${user.firstname} ${user.lastname}`}
+              username={user.username}
+              email={user.email}
+            />
           ),
-          phoneNumber: "Loading...",
-          email: "Loading...",
-          birthdate: "Loading...",
-          createdAt: "Loading...",
+          phoneNumber: user.phonenumber,
+          email: user.email,
+          birthdate: new Date(user.birthdate).toLocaleDateString(),
+          createdAt: new Date(user.createdat).toLocaleDateString(),
           status: (
-            <MDBox ml={-1}>
-              <MDBadge badgeContent="loading" color="light" variant="gradient" size="sm" />
-            </MDBox>
+            <MDBadge
+              badgeContent={user.userState}
+              color={
+                user.userState === "Active"
+                  ? "success"
+                  : user.userState === "Pending"
+                  ? "warning"
+                  : "error"
+              }
+              variant="gradient"
+              size="sm"
+            />
           ),
-          action: "Loading...",
-        },
-      ]
-    : users
-    ? users.map((user) => ({
-        key: user.userid,
-        userId: user.userid,
-        User: (
-          <Author
-            image={user.userimg || `https://ui-avatars.com/api/?name=${user.firstname}+${user.lastname}`}
-            name={`${user.firstname} ${user.lastname}`}
-            username={user.username}
-            email={user.email}
-          />
-        ),
-        phoneNumber: user.phonenumber,
-        email: user.email,
-        birthdate: new Date(user.birthdate).toLocaleDateString(),
-        createdAt: new Date(user.createdat).toLocaleDateString(),
-        status: (
-          <MDBadge
-            badgeContent={user.userState}
-            color={
-              user.userState === "Active"
-                ? "success"
-                : user.userState === "Pending"
-                ? "warning"
-                : "error"
-            }
-            variant="gradient"
-            size="sm"
-          />
-        ),
-        action: (
-          <Button variant="text" color="primary" onClick={() => handleEditClick(user)}>
-            Edit
-          </Button>
-        ),
-      }))
-    : 'No users to display.';
-}, [loading, users]);
-
+          action: (
+            <Button variant="text" color="primary" onClick={() => handleEditClick(user)}>
+              Edit
+            </Button>
+          ),
+        }))
+      : "No users to display.";
+  }, [loading, users]);
 
   Author.propTypes = {
     image: PropTypes.string.isRequired,
@@ -238,17 +240,17 @@ const rows = useMemo(() => {
   };
 
   return {
-  columns : [
-  { Header: "User", accessor: "User", width: "35%", align: "left" },
-  { Header: "User ID", accessor: "userId", width: "15%", align: "center" },
-  { Header: "Phone Number", accessor: "phoneNumber", align: "left" },
-  { Header: "Email", accessor: "email", align: "left" },
-  { Header: "Birthdate", accessor: "birthdate", align: "center" },
-  { Header: "Created At", accessor: "createdAt", align: "center" },
-  { Header: "Status", accessor: "status", align: "center" },
-  { Header: "Action", accessor: "action", align: "center" },
-  ],
-  rows: rows,
+    columns: [
+      { Header: "User", accessor: "User", width: "35%", align: "left" },
+      { Header: "User ID", accessor: "userId", width: "15%", align: "center" },
+      { Header: "Phone Number", accessor: "phoneNumber", align: "left" },
+      { Header: "Email", accessor: "email", align: "left" },
+      { Header: "Birthdate", accessor: "birthdate", align: "center" },
+      { Header: "Created At", accessor: "createdAt", align: "center" },
+      { Header: "Status", accessor: "status", align: "center" },
+      { Header: "Action", accessor: "action", align: "center" },
+    ],
+    rows: rows,
     activeCount,
     pendingCount,
     blockedCount,
@@ -263,6 +265,5 @@ const rows = useMemo(() => {
     // Notification snackbar
     notification,
     handleCloseNotification,
-
   };
 }

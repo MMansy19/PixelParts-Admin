@@ -1,5 +1,14 @@
 import React, { useState, useEffect, useMemo } from "react";
-import { Grid, Card, Dialog, DialogTitle, DialogContent, DialogActions, Button, CircularProgress } from "@mui/material";
+import {
+  Grid,
+  Card,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  Button,
+  CircularProgress,
+} from "@mui/material";
 import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
 import DashboardNavbar from "examples/Navbars/DashboardNavbar";
 import Footer from "examples/Footer";
@@ -16,7 +25,16 @@ import ProductDetailsDialog from "./productDetailsDialog";
 function OrdersDashboard() {
   const [stats, setStats] = useState({});
   const [loading, setLoading] = useState(true);
-  const { columns, rows, notification, setNotification, isModalOpen, fetchProducts, handleCloseModal, handleCloseNotification } = appData();
+  const {
+    columns,
+    rows,
+    notification,
+    setNotification,
+    isModalOpen,
+    fetchProducts,
+    handleCloseModal,
+    handleCloseNotification,
+  } = appData();
 
   useEffect(() => {
     const fetchAppointmentsStats = async () => {
@@ -41,10 +59,33 @@ function OrdersDashboard() {
       <MDBox pt={6} pb={3}>
         <Grid container spacing={3} marginBottom={5}>
           {[
-            { title: "Total Orders", count: stats.completedappointments + stats.scheduledappointments + stats.cancelledappointments, color: "dark", icon: "people" },
-            { title: "Scheduled Orders", count: stats.scheduledappointments, color: "warning", icon: "timer" },
-            { title: "Completed Orders", count: stats.completedappointments, color: "success", icon: "done" },
-            { title: "Canceled Orders", count: stats.cancelledappointments, color: "error", icon: "block" },
+            {
+              title: "Total Orders",
+              count:
+                stats.completedappointments +
+                stats.scheduledappointments +
+                stats.cancelledappointments,
+              color: "dark",
+              icon: "people",
+            },
+            {
+              title: "Scheduled Orders",
+              count: stats.scheduledappointments,
+              color: "warning",
+              icon: "timer",
+            },
+            {
+              title: "Completed Orders",
+              count: stats.completedappointments,
+              color: "success",
+              icon: "done",
+            },
+            {
+              title: "Canceled Orders",
+              count: stats.cancelledappointments,
+              color: "error",
+              icon: "block",
+            },
           ].map(({ title, count, color, icon }) => (
             <Grid item xs={12} md={6} lg={3} key={title}>
               <MDBox mb={1.5}>
@@ -62,24 +103,53 @@ function OrdersDashboard() {
         <Grid container spacing={6}>
           <Grid item xs={12}>
             <Card>
-              <MDBox mx={2} mt={-3} py={3} px={2} variant="gradient" bgColor="dark" borderRadius="lg" coloredShadow="info" display="flex" justifyContent="space-between" alignItems="center">
-                <MDTypography variant="h6" color="white">Orders Table</MDTypography>
+              <MDBox
+                mx={2}
+                mt={-3}
+                py={3}
+                px={2}
+                variant="gradient"
+                bgColor="dark"
+                borderRadius="lg"
+                coloredShadow="info"
+                display="flex"
+                justifyContent="space-between"
+                alignItems="center"
+              >
+                <MDTypography variant="h6" color="white">
+                  Orders Table
+                </MDTypography>
               </MDBox>
               <MDBox pt={3}>
-                <DataTable table={{ columns, rows }} isSorted entriesPerPage={false} showTotalEntries noEndBorder />
+                <DataTable
+                  table={{ columns, rows }}
+                  isSorted
+                  entriesPerPage={false}
+                  showTotalEntries
+                  noEndBorder
+                />
               </MDBox>
             </Card>
           </Grid>
         </Grid>
       </MDBox>
       <Footer />
-      <MDSnackbar color={notification.severity} icon={notification.severity === "success" ? "check" : "error"} title={notification.severity === "success" ? "Success" : "Error"} content={notification.message} open={notification.open} onClose={handleCloseNotification} close={handleCloseNotification} bgWhite />
-      
-        <ProductDetailsDialog
-          isOpen={isModalOpen}
-          handleClose={handleCloseModal}
-          fetchProducts={fetchProducts}
-        />
+      <MDSnackbar
+        color={notification.severity}
+        icon={notification.severity === "success" ? "check" : "error"}
+        title={notification.severity === "success" ? "Success" : "Error"}
+        content={notification.message}
+        open={notification.open}
+        onClose={handleCloseNotification}
+        close={handleCloseNotification}
+        bgWhite
+      />
+
+      <ProductDetailsDialog
+        isOpen={isModalOpen}
+        handleClose={handleCloseModal}
+        fetchProducts={fetchProducts}
+      />
     </DashboardLayout>
   );
 }

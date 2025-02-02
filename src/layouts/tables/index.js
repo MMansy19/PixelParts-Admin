@@ -143,17 +143,17 @@ function Tables() {
       </MDBox>
       <Footer />
 
-<Dialog
-  open={isModalOpen}
-  onClose={handleCloseModal}
-  TransitionComponent={Fade}
-  TransitionProps={{ timeout: 500 }}
->
-  <DialogTitle>Update User State</DialogTitle>
-  <DialogContent>
-    {editedUser && (
-      <>
-        {/* <TextField
+      <Dialog
+        open={isModalOpen}
+        onClose={handleCloseModal}
+        TransitionComponent={Fade}
+        TransitionProps={{ timeout: 500 }}
+      >
+        <DialogTitle>Update User State</DialogTitle>
+        <DialogContent>
+          {editedUser && (
+            <>
+              {/* <TextField
           name="firstname"
           label="First Name"
           value={editedUser.firstname || ""}
@@ -185,31 +185,31 @@ function Tables() {
           fullWidth
           margin="dense"
         /> */}
-        <Select
-          name="userState"
-          label="User State"
-          value={editedUser.userState || ""}
-          onChange={handleInputChange}
-          fullWidth
-          margin="dense"
-          style={{ marginTop: "1px", padding: "11px" }}
-        >
-          <MenuItem value="Active">Active</MenuItem>
-          <MenuItem value="Pending">Pending</MenuItem>
-          <MenuItem value="Blocked">Blocked</MenuItem>
-        </Select>
-      </>
-    )}
-  </DialogContent>
-  <DialogActions>
-    <Button onClick={handleCloseModal} color="secondary">
-      Cancel
-    </Button>
-    <Button onClick={handleSaveChanges} color="primary">
-      Save
-    </Button>
-  </DialogActions>
-</Dialog>
+              <Select
+                name="userState"
+                label="User State"
+                value={editedUser.userState || ""}
+                onChange={handleInputChange}
+                fullWidth
+                margin="dense"
+                style={{ marginTop: "1px", padding: "11px" }}
+              >
+                <MenuItem value="Active">Active</MenuItem>
+                <MenuItem value="Pending">Pending</MenuItem>
+                <MenuItem value="Blocked">Blocked</MenuItem>
+              </Select>
+            </>
+          )}
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCloseModal} color="secondary">
+            Cancel
+          </Button>
+          <Button onClick={handleSaveChanges} color="primary">
+            Save
+          </Button>
+        </DialogActions>
+      </Dialog>
 
       {/* Notification Snackbar */}
       <MDSnackbar

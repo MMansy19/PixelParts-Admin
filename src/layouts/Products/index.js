@@ -24,7 +24,7 @@ import Axios from "axios";
 import Cookies from "js-cookie";
 import axios from "axios";
 import { Box, FormControl, InputLabel } from "@mui/material";
-import CloudUploadIcon from '@mui/icons-material/CloudUpload';
+import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 
 // Data
 import appData from "layouts/Products/data/appData";
@@ -424,7 +424,7 @@ function Tables() {
             <Button
               variant="outlined"
               color="primary"
-              onClick={() => handleAddSpecification(isEditedProduct = false)}
+              onClick={() => handleAddSpecification((isEditedProduct = false))}
               style={{ marginTop: "10px", color: "green" }}
             >
               Add Specification
@@ -573,46 +573,46 @@ function Tables() {
         TransitionProps={{ timeout: 500 }}
         fullWidth
         maxWidth="sm"
-        >
-          <DialogTitle>Add Offer</DialogTitle>
-          <DialogContent>
-            <TextField
-              name="offerPercentage"
-              label="Offer Percentage"
-              value={newOffer.offerPercentage}
-              onChange={(e) => setNewOffer({ ...newOffer, offerPercentage: e.target.value })}
-              type="number"
-              fullWidth
-              margin="dense"
-            />
-            <TextField
-              name="startDate"
-              label="Start Date"
-              value={newOffer.startDate}
-              onChange={(e) => setNewOffer({ ...newOffer, startDate: e.target.value })}
-              type="date"
-              fullWidth
-              margin="dense"
-            />
-            <TextField
-              name="endDate"
-              label="End Date"
-              value={newOffer.endDate}
-              onChange={(e) => setNewOffer({ ...newOffer, endDate: e.target.value })}
-              type="date"
-              fullWidth
-              margin="dense"
-            />
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={closeOfferModal} color="secondary">
-              Cancel
-            </Button>
-            <Button onClick={() => handleAddOffer(newOffer)} color="primary">
-              Save
-            </Button>
-          </DialogActions>
-        </Dialog>
+      >
+        <DialogTitle>Add Offer</DialogTitle>
+        <DialogContent>
+          <TextField
+            name="offerPercentage"
+            label="Offer Percentage"
+            value={newOffer.offerPercentage}
+            onChange={(e) => setNewOffer({ ...newOffer, offerPercentage: e.target.value })}
+            type="number"
+            fullWidth
+            margin="dense"
+          />
+          <TextField
+            name="startDate"
+            label="Start Date"
+            value={newOffer.startDate}
+            onChange={(e) => setNewOffer({ ...newOffer, startDate: e.target.value })}
+            type="date"
+            fullWidth
+            margin="dense"
+          />
+          <TextField
+            name="endDate"
+            label="End Date"
+            value={newOffer.endDate}
+            onChange={(e) => setNewOffer({ ...newOffer, endDate: e.target.value })}
+            type="date"
+            fullWidth
+            margin="dense"
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={closeOfferModal} color="secondary">
+            Cancel
+          </Button>
+          <Button onClick={() => handleAddOffer(newOffer)} color="primary">
+            Save
+          </Button>
+        </DialogActions>
+      </Dialog>
       {/* File Modal */}
       <Dialog
         open={isFileModalOpen}
@@ -641,12 +641,7 @@ function Tables() {
                 }}
               />
             )}
-            <Button
-              component="label"
-              tabIndex={-1}
-              startIcon={<CloudUploadIcon />}
-              fullWidth
-            >
+            <Button component="label" tabIndex={-1} startIcon={<CloudUploadIcon />} fullWidth>
               Upload Product Image
               <input hidden accept="image/*" type="file" name="image" onChange={handleFileChange} />
             </Button>

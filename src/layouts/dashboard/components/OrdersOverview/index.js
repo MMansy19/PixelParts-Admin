@@ -1,87 +1,63 @@
-// @mui material components
+import { useEffect, useState, useMemo } from "react";
+import Axios from "axios";
+import Cookies from "js-cookie";
+import { Bar } from "react-chartjs-2";
 import Card from "@mui/material/Card";
-import Icon from "@mui/material/Icon";
-
-// Material Dashboard 2 React components
 import MDBox from "components/MDBox";
 import MDTypography from "components/MDTypography";
 
-// Material Dashboard 2 React example components
-import TimelineItem from "examples/Timeline/TimelineItem";
-import Axios from "axios";
-import { useEffect, useState } from "react";
-import Cookies from "js-cookie";
-
-function OrdersOverview() {
-  const [appointments, setAppointments] = useState([]);
-  const [loading, setLoading] = useState(true);
-
-  const fetchAppointments = async () => {
-    const token = Cookies.get("authToken");
-    try {
-      const response = await Axios.get(
-        "https://mediportal-api-production.up.railway.app/api/v1/appointments/allAppointments?limit=5&order=appointmentDate",
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        }
-      );
-      setAppointments(response.data.data.Appointments);
-      setLoading(false);
-    } catch (error) {
-      console.error(error);
-      setLoading(false);
-    }
-  };
+function OrdersChart() {
+  const [orders, setOrders] = useState([]);
 
   useEffect(() => {
-    fetchAppointments();
+    const fetchOrders = async () => {
+      const token = Cookies.get("authToken");
+      try {
+        const response = await Axios.get(
+          "https://pixelparts-dev-api.up.railway.app/api/v1/order/allOrders?limit=7&order=-o.orderDate",
+          { headers: { Authorization: `Bearer ${token}` } }
+        );
+        setOrders(response.data.data.orders);
+      } catch (error) {
+        console.error("Error fetching orders:", error);
+      }
+    };
+
+    fetchOrders();
   }, []);
 
-  return (
-    <Card sx={{ height: "100%" }}>
-      <MDBox pt={3} px={3}>
-        <MDTypography variant="h6" fontWeight="medium">
-          Products Overview
-        </MDTypography>
-        <MDBox mt={0} mb={2}>
-          <MDTypography variant="button" color="text" fontWeight="regular">
-            <MDTypography display="inline" variant="body2" verticalAlign="middle">
-              <Icon sx={{ color: ({ palette: { success } }) => success.main }}>arrow_upward</Icon>
-            </MDTypography>
-            &nbsp;
-            <MDTypography variant="button" color="text" fontWeight="medium">
-              24%
-            </MDTypography>{" "}
-            this month
-          </MDTypography>
-        </MDBox>
-      </MDBox>
+  const chartData = useMemo(() => {
+    if (orders.length === 0) return null;
 
-      {loading ? (
-        <MDBox display="flex" justifyContent="center" alignItems="center" height="100%">
-          <Icon sx={{ fontSize: 40 }}>hourglass_empty</Icon>
-        </MDBox>
-      ) : (
-        <MDBox p={2}>
-          {appointments.map((appointment, index) => (
-            <TimelineItem
-              key={appointment.appointmentid}
-              color={
-                appointment.appointmentstatus === "Scheduled"
-                  ? "info"
-                  : appointment.appointmentstatus === "Completed"
-                  ? "success"
-                  : "error"
-              }
-              icon="notifications"
-              title={`Products with Dr. ${appointment.doctorfirstname} ${appointment.doctorlastname} for ${appointment.patientfirstname} ${appointment.patientlastname}`}
-              dateTime={new Date(appointment.appointmentdate).toLocaleString()}
-            />
-          ))}
-        </MDBox>
-      )}
+    return {
+      labels: orders.map((order) =>
+        new Date(order.orderdate).toLocaleDateString("en-US", {
+          month: "short",
+          day: "numeric",
+        })
+      ),
+      datasets: [
+        {
+          label: "Total Price ($)",
+          data: orders.map((order) => parseFloat(order.totalprice)),
+          backgroundColor: ["#3F51B5", "#009688", "#FF9800", "#F44336", "#4CAF50", "#2196F3", "#FFC107"],
+        },
+      ],
+    };
+  }, [orders]);
+
+  return (
+    <Card sx={{ padding: 3 }}>
+      <MDBox>
+        <MDTypography variant="h6" fontWeight="medium">
+          Last 7 Orders
+        </MDTypography>
+      </MDBox>
+      <MDBox>
+        {chartData ? <Bar data={chartData} /> : <MDTypography>Loading...</MDTypography>}
+      </MDBox>
     </Card>
   );
 }
 
-export default OrdersOverview;
+export default OrdersChart;

@@ -77,36 +77,36 @@ function Tables() {
       </MDBox>
       <Footer />
 
-<Dialog
-  open={isModalOpen}
-  onClose={handleCloseModal}
-  TransitionComponent={Fade}
-  TransitionProps={{ timeout: 500 }}
-  fullWidth
-  maxWidth="sm"
->
-  <DialogTitle>Answer to message</DialogTitle>
-  <DialogContent>
-    {editedMessage && (
-      <TextField
-      name="message"
-      value={editedMessage.message || ""}
-      onChange={handleInputChange}
-      fullWidth
-      multiline
-      rows={3}
-    />
-    )}
-  </DialogContent>  
-  <DialogActions>
-    <Button onClick={handleCloseModal} color="secondary">
-      Cancel
-    </Button>
-    <Button onClick={handleSaveChanges} color="primary">
-      Save
-    </Button>
-  </DialogActions>
-</Dialog>
+      <Dialog
+        open={isModalOpen}
+        onClose={handleCloseModal}
+        TransitionComponent={Fade}
+        TransitionProps={{ timeout: 500 }}
+        fullWidth
+        maxWidth="sm"
+      >
+        <DialogTitle>Answer to message</DialogTitle>
+        <DialogContent>
+          {editedMessage && (
+            <TextField
+              name="message"
+              value={editedMessage.message || ""}
+              onChange={handleInputChange}
+              fullWidth
+              multiline
+              rows={3}
+            />
+          )}
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCloseModal} color="secondary">
+            Cancel
+          </Button>
+          <Button onClick={handleSaveChanges} color="primary">
+            Save
+          </Button>
+        </DialogActions>
+      </Dialog>
 
       {/* Notification Snackbar */}
       <MDSnackbar

@@ -40,12 +40,12 @@ function Tables() {
     handleEditOffer,
     closeOfferModal,
   } = appData();
-  
-    const [newOffer, setNewOffer] = useState({
-      offerPercentage: oldOffer,
-      startDate: String(new Date()),
-      endDate: String(new Date()),
-    });
+
+  const [newOffer, setNewOffer] = useState({
+    offerPercentage: oldOffer,
+    startDate: String(new Date()),
+    endDate: String(new Date()),
+  });
   const fetchAppointmentsStats = async () => {
     try {
       setLoading(true);
@@ -182,47 +182,47 @@ function Tables() {
         TransitionProps={{ timeout: 500 }}
         fullWidth
         maxWidth="sm"
-        >
-          <DialogTitle>Edit Offer</DialogTitle>
-          <DialogContent>
-            <TextField
-              name="offerPercentage"
-              label="Offer Percentage"
-              defaultValue={oldOffer}
-              value={newOffer.offerPercentage}
-              onChange={(e) => setNewOffer({ ...newOffer, offerPercentage: e.target.value })}
-              type="number"
-              fullWidth
-              margin="dense"
-            />
-            <TextField
-              name="startDate"
-              label="Start Date"
-              value={newOffer.startDate}
-              onChange={(e) => setNewOffer({ ...newOffer, startDate: e.target.value })}
-              type="date"
-              fullWidth
-              margin="dense"
-            />
-            <TextField
-              name="endDate"
-              label="End Date"
-              value={newOffer.endDate}
-              onChange={(e) => setNewOffer({ ...newOffer, endDate: e.target.value })}
-              type="date"
-              fullWidth
-              margin="dense"
-            />
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={closeOfferModal} color="secondary">
-              Cancel
-            </Button>
-            <Button onClick={() => handleEditOffer(newOffer)} color="primary">
-              Save
-            </Button>
-          </DialogActions>
-        </Dialog>
+      >
+        <DialogTitle>Edit Offer</DialogTitle>
+        <DialogContent>
+          <TextField
+            name="offerPercentage"
+            label="Offer Percentage"
+            defaultValue={oldOffer}
+            value={newOffer.offerPercentage}
+            onChange={(e) => setNewOffer({ ...newOffer, offerPercentage: e.target.value })}
+            type="number"
+            fullWidth
+            margin="dense"
+          />
+          <TextField
+            name="startDate"
+            label="Start Date"
+            value={newOffer.startDate}
+            onChange={(e) => setNewOffer({ ...newOffer, startDate: e.target.value })}
+            type="date"
+            fullWidth
+            margin="dense"
+          />
+          <TextField
+            name="endDate"
+            label="End Date"
+            value={newOffer.endDate}
+            onChange={(e) => setNewOffer({ ...newOffer, endDate: e.target.value })}
+            type="date"
+            fullWidth
+            margin="dense"
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={closeOfferModal} color="secondary">
+            Cancel
+          </Button>
+          <Button onClick={() => handleEditOffer(newOffer)} color="primary">
+            Save
+          </Button>
+        </DialogActions>
+      </Dialog>
       {/* Confirm Deletion */}
       <Dialog
         open={isDeleteModalOpen}
