@@ -42,7 +42,6 @@ import Contact from "layouts/contact";
 import Orders from "layouts/orders";
 import SignIn from "layouts/authentication/sign-in";
 import AddUser from "layouts/UserForm";
-import Graphs from "layouts/Graphs";
 import Products from "layouts/Products";
 import Calendar from "layouts/Calendar";
 import Profile from "layouts/profile";
@@ -107,14 +106,6 @@ const routes = [
     icon: <Icon fontSize="small">calendar_today</Icon>,
     route: "/calendar",
     component: <Calendar />,
-  },
-  {
-    type: "collapse",
-    name: "Graphs",
-    key: "graphs",
-    icon: <Icon fontSize="small">bar_chart</Icon>,
-    route: "/graphs",
-    component: <Graphs />,
   },
   {
     type: "collapse",
