@@ -66,7 +66,7 @@ export default function contactTableData() {
 
   const handleEditClick = (message) => {
     console.log("Editing message:", message);
-    setEditedMessage({ message });
+    setEditedMessage( message );
     setIsModalOpen(true);
   };
 

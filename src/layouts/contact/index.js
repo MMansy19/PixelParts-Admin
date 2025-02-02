@@ -90,7 +90,7 @@ function Tables() {
           {editedMessage && (
             <TextField
               name="message"
-              value={editedMessage.message || ""}
+              value={editedMessage.answer}
               onChange={handleInputChange}
               fullWidth
               multiline
