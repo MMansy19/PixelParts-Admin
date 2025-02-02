@@ -47,7 +47,7 @@ function OrdersChart() {
   }, [orders]);
 
   return (
-    <Card sx={{ padding: 3 }}>
+    <Card sx={{ padding: 5, marginTop: 3 }}>
       <MDBox>
         <MDTypography variant="h6" fontWeight="medium">
           Last 7 Orders
