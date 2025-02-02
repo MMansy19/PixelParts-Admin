@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Grid from "@mui/material/Grid";
 import Card from "@mui/material/Card";
-import Button from "@mui/material/Button";
-import Modal from "@mui/material/Modal";
 import Box from "@mui/material/Box";
 import CircularProgress from "@mui/material/CircularProgress";
 import MDBox from "components/MDBox";
@@ -21,43 +19,42 @@ function ChartsDashboard() {
   const [pendingCount, setPendingCount] = useState(0);
   const [blockedCount, setBlockedCount] = useState(0);
   const [loading, setLoading] = useState(true);
-  const [doctorsStats, setDoctorsStats] = useState({});
-  const [stats, setStats] = useState({});
+  const [error, setError] = useState(null);
+  const [userStats, setUserStats] = useState({});
+  const [orderStats, setOrderStats] = useState({});
 
-  const fetchDoctorsStat = async () => {
-    try {
-      const response = await Axios.get(
-        "https://mediportal-api-production.up.railway.app/api/v1/doctors/stats"
-      );
-      // console.log(response);
-      setDoctorsStats(response.data.data.stats);
-    } catch (error) {
-      console.error("Error fetching doctors:", error);
-    } finally {
-      setLoading(false);
-    }
-  };
 
-  const fetchAppointmentsStats = async () => {
-    try {
-      setLoading(true);
-      const response = await Axios.get(
-        "https://mediportal-api-production.up.railway.app/api/v1/appointments/stats",
-        {
-          headers: { Authorization: `Bearer ${Cookies.get("authToken")}` },
-        }
-      );
-      setLoading(false);
-      console.log(response.data.data.stats);
-      setStats(response.data.data.stats);
-    } catch (error) {
-      console.error(error);
-    }
-  };
 
   useEffect(() => {
-    fetchDoctorsStat();
-    fetchAppointmentsStats();
+    const token = Cookies.get("authToken");
+
+    if (!token) {
+      setError("Authentication token missing.");
+      setLoading(false);
+      return;
+    }
+    const fetchData = async () => {
+      try {
+        const [userRes, orderRes] = await Promise.all([
+          Axios.get("https://pixelparts-dev-api.up.railway.app/api/v1/stats/userStats", {
+            headers: { Authorization: `Bearer ${token}` },
+          }),
+          Axios.get("https://pixelparts-dev-api.up.railway.app/api/v1/stats/orderStats", {
+            headers: { Authorization: `Bearer ${token}` },
+          }),
+        ]);
+
+        setUserStats(userRes.data.data.stats);
+        setOrderStats(orderRes.data.data.stats);
+      } catch (err) {
+        setError("Error fetching data. Please try again.");
+        console.error(err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
   }, []);
 
   const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042"];
@@ -65,37 +62,26 @@ function ChartsDashboard() {
   const samplePieData = [
     {
       label: "Active",
-      value: doctorsStats.activedoctors,
-      percentage: doctorsStats.activepercentage,
+      value: userStats.activeusers,
+      percentage: userStats.activepercentage,
     },
     {
       label: "Pending",
-      value: doctorsStats.pendingdoctors,
-      percentage: doctorsStats.pendingpercentage,
+      value: userStats.pendingusers,
+      percentage: userStats.pendingpercentage,
     },
     {
       label: "Blocked",
-      value: doctorsStats.blockeddoctors,
-      percentage: doctorsStats.blockedpercentage,
+      value: userStats.blockedusers,
+      percentage: userStats.blockedpercentage,
     },
   ];
 
-  const appData = [
-    {
-      label: "Completed",
-      value: stats.completedappointments,
-      percentage: stats.completedpercentage,
-    },
-    {
-      label: "Scheduled",
-      value: stats.scheduledappointments,
-      percentage: stats.scheduledpercentage,
-    },
-    {
-      label: "Cancelled",
-      value: stats.cancelledappointments,
-      percentage: stats.cancelledpercentage,
-    },
+
+  const orderPieData = [
+    { label: "Paid", value: orderStats.paidorders, percentage: orderStats.paidpercentage },
+    { label: "Pending", value: orderStats.pendingorders, percentage: orderStats.pendingpercentage },
+    { label: "Cancelled", value: orderStats.cancelledorders, percentage: orderStats.cancelledpercentage },
   ];
 
   const sampleBarData = [
@@ -226,7 +212,7 @@ function ChartsDashboard() {
                     height={300}
                     series={[
                       {
-                        data: appData,
+                        data: orderPieData,
                         arcLabel: (item) => `${item.percentage}%`,
                         arcLabelMinAngle: 50,
                         arcLabelRadius: "60%",
@@ -234,26 +220,26 @@ function ChartsDashboard() {
                         faded: { innerRadius: 30, additionalRadius: -30, color: "gray" },
                       },
                     ]}
-                    colors={["#00C49F", "#FFBB28", "#850000"]}
-                    title="Pie Chart"
+                    colors={COLORS}
+                    title="Orders Distribution"
                   >
                     <Pie
-                      data={appData}
+                      data={orderPieData}
                       dataKey="value"
-                      nameKey="name"
+                      nameKey="label"
                       cx="50%"
                       cy="50%"
                       outerRadius={120}
                       fill="#8884d8"
                       label
                     >
-                      {appData.map((entry, index) => (
+                      {orderPieData.map((entry, index) => (
                         <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                       ))}
                     </Pie>
-                    <Tooltip />
                   </PieChart>
                 </MDBox>
+
               </Card>
             </Grid>
             <Grid item xs={12} md={6} lg={6} marginTop={3}>
