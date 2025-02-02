@@ -89,7 +89,13 @@ function OrdersDashboard() {
             <CircularProgress />
           </MDBox>
         ) : (
-          <DataTable table={{ columns, rows }} showTotalEntries={false} isSorted noEndBorder />
+          <DataTable                   
+            table={{ columns, rows }}
+            isSorted
+            entriesPerPage={false}
+            showTotalEntries
+            noEndBorder
+          />
         )}
       </MDBox>
     </Card>
