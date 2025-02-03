@@ -37,7 +37,7 @@ function Tables() {
     try {
       setLoading(true);
       const response = await Axios.get(
-        "https://mediportal-api-production.up.railway.app/api/v1/appointments/allAppointments",
+        "https://PixelParts-api-production.up.railway.app/api/v1/appointments/allAppointments",
         {
           headers: { Authorization: `Bearer ${Cookies.get("authToken")}` },
         }

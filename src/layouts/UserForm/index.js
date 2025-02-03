@@ -52,7 +52,7 @@ export default function AddUser() {
 
     try {
       const response = await axios.post(
-        "https://mediportal-api-production.up.railway.app/api/v1/auth/register",
+        "https://PixelParts-api-production.up.railway.app/api/v1/auth/register",
         userData
       );
       setLoading(false);

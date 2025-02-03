@@ -77,7 +77,7 @@ export default function App() {
   }, []);
 
   useEffect(() => {
-    document.title = "MediPortal Admin";
+    document.title = "PixelParts Admin";
   }, []);
 
   // Open sidenav when mouse enter on mini sidenav
@@ -155,7 +155,7 @@ export default function App() {
           <Sidenav
             color={sidenavColor}
             brand={(transparentSidenav && !darkMode) || whiteSidenav ? brandDark : brandWhite}
-            brandName="MediPortal"
+            brandName="PixelParts"
             routes={routes}
             onMouseEnter={handleOnMouseEnter}
             onMouseLeave={handleOnMouseLeave}

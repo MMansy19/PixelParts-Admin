@@ -78,7 +78,7 @@ function Overview() {
     try {
       console.log(formData);
       const response = Axios.patch(
-        "https://mediportal-api-production.up.railway.app/api/v1/auth/updateMe",
+        "https://PixelParts-api-production.up.railway.app/api/v1/auth/updateMe",
         formData,
         {
           headers: {
@@ -108,7 +108,7 @@ function Overview() {
   const handleSavePassword = () => {
     try {
       Axios.patch(
-        "https://mediportal-api-production.up.railway.app/api/v1/auth/updatePassword", // Update password
+        "https://PixelParts-api-production.up.railway.app/api/v1/auth/updatePassword", // Update password
         {
           oldPassword: formData.oldPassword,
           newPassword: formData.newPassword,
